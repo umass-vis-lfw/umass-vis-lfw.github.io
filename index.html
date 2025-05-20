@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xml:lang="en" lang="en">
+
+<!--
+// Derived From:
+//
+// Copyright (C) Julian I. Kamil <julian.kamil@gmail.com>
+// No warranty is provided.  Use at your own risk.
+//
+// Commercial support is available through ESV Media Group
+// who can be reached at: http://www.ESV-i.com/.
+//
+// Name: simple.tmpl
+// Author: Julian I. Kamil <julian.kamil@gmail.com>
+// Created: 2005-05-18
+// Description:
+//     This is a simple skin for PmWiki. Please see:
+//         http://www.madhckr.com/project/PmWiki/SimpleSkin
+//     for a live example and doumentation.
+//
+// $Id: simple.tmpl,v 1.1 2005/08/17 19:24:54 julian Exp $
+//
+//
+-->
+
+    <head>
+        <title>LFW Face Database : Main</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--HeaderText-->
+        <link rel='stylesheet' title="(NotSo) Simple" href='https://vis-www.cs.umass.edu/css/notsosimple.css' type='text/css' />
+    </head>
+
+<body>	    
+    <div id="header">
+        <div id="page-title">Labeled Faces in the Wild</div>
+    </div>
+
+    <div id="main">
+        <div class="content-mat">
+            <div id="content">
+                <div id='sidebar'>
+
+<img src="umasslogo.gif" alt="umass seal" width="100" /><br /><br />
+
+<h3>Menu</h3>
+<ul>
+<li><a href="index.html">LFW Home</a></li>
+<ul>
+<li><a href="#explore">Explore</a></li>
+<li><a href="#download">Download</a></li>
+<li><a href="#views">Train/Test</a></li>
+<li><a href="results.html">Results</a></li>
+<li><a href="#information">Information</a></li>
+<li><a href="#errata">Errata</a></li>
+<li><a href="#reference">Reference</a></li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#contact">Contact</a></li>
+<li><a href="#support">Support</a></li>
+<li><a href="#change">Changes</a></li>
+</ul>
+<li><a href="http://vis-www.cs.umass.edu/lfw/part_labels">Part Labels</a></li>
+<li><a href="http://vis-www.cs.umass.edu">UMass Vision</a></li>
+</ul><br />
+
+</div>
+                    <!--PageText-->
+<div id='wikitext'>
+<h1>Labeled Faces in the Wild Home</h1>
+<hr />
+<p class='vspace'></p>
+
+<div style='text-align: center;'> 
+<img src="Six_Face_Panels_sm.jpg" alt="logo" /><br />
+</div> 
+
+<div style="border: thin dashed rgb(255, 0, 0); margin: 20px; padding: 20px 5px 20px 5px;">
+
+On October 29th at ICCV 2019 in Seoul, the creators of LFW were
+<a href="https://www.umass.edu/newsoffice/article/cics-professor-erik-learned-miller">honored
+with the Mark Everingham Award for service to the Computer Vision
+Community</a>. Thanks to all that have participated in making LFW a
+success!
+
+</div>
+
+<div style="border: thin dashed rgb(255, 0, 0); margin: 20px; padding: 5px;">
+
+<span style="font-variant:small-caps;">New results page:<br /><br />
+
+We have recently updated and changed the format and content of our
+<a href="results.html">results page</a>.  Please refer to
+the <a href="lfw_update.pdf">new technical report</a> for details of
+the changes.<span>
+
+</div>
+
+<div style="border: thin dashed rgb(255, 0, 0); margin: 20px; padding: 5px;">
+<a name="lfw_disclaimer"></a>
+<center>
+<span style="font-variant:small-caps;">DISCLAIMER:</span><br /><br />
+</center>
+
+Labeled Faces in the Wild is a public benchmark for face verification,
+also known as pair matching.  No matter what the performance of an
+algorithm on LFW, it should not be used to conclude that an algorithm
+is suitable for any commercial purpose. There are many reasons for
+this. Here is a non-exhaustive list:<br /><br />
+
+<ul>
+  <li>Face verification and other forms of face recognition are very
+different problems. For example, it is very difficult to extrapolate
+from performance on verification to performance on 1:N
+recognition.</li>
+  <li>Many groups are not well represented in LFW. For example, there
+are very few children, no babies, very few people over the age of 80,
+and a relatively small proportion of women. In addition, many
+ethnicities have very minor representation or none at all.</li>
+  <li>While theoretically LFW could be used to assess performance for
+certain subgroups, the database was not designed to have enough data
+for strong statistical conclusions about subgroups. Simply put, LFW is
+not large enough to provide evidence that a particular piece of
+software has been thoroughly tested.</li>
+  <li>Additional conditions, such as poor lighting, extreme pose,
+strong occlusions, low resolution, and other important factors do not
+constitute a major part of LFW. These are important areas of
+evaluation, especially for algorithms designed to recognize images “in
+the wild”.</li>
+</ul><br/>
+
+For all of these reasons, we would like to emphasize that LFW was
+published to help the research community make advances in face
+verification, not to provide a thorough vetting of commercial
+algorithms before deployment.<br /><br />
+
+While there are many resources available for assessing face
+recognition algorithms, such as the Face Recognition Vendor Tests run
+by the USA National Institute of Standards and Technology (NIST), the
+understanding of how to best test face recognition algorithms for
+commercial use is a rapidly evolving area. Some of us are actively
+involved in developing these new standards, and will continue to make
+them publicly available when they are ready.
+
+</span>
+</div>
+
+<div style="border-left: thin dashed rgb(9, 74, 140); margin: 20px; padding: 5px;">
+Welcome to Labeled Faces in the Wild, a database of face photographs
+designed for studying the problem of unconstrained face recognition.
+The data set contains more than 13,000 images of faces collected from
+the web. Each face has been labeled with the name of the person
+pictured. 1680 of the people pictured have two or more distinct photos
+in the data set. The only constraint on these faces is that they were
+detected by the Viola-Jones face detector. More details can be found
+in the technical report below.<br /><br />
+There are now four different sets of LFW images including the original and three different types of "aligned" images.
+The aligned images include "funneled images" (ICCV 2007), LFW-a, which uses an unpublished method of alignment,
+and "deep funneled" images (NIPS 2012). Among these, LFW-a and the deep funneled images produce superior results 
+for most face verification  algorithms over the original images and over the funneled images (ICCV 2007). <br></br>
+
+<u>Related</u>: <br /><br />
+
+<font color="red">[new] </font><a href="http://vis-www.cs.umass.edu/lfw/#resources">Collected
+resources related to LFW</a> - updated 2017/05/09.<br /><br />
+
+LFW <a href="#deepfunnel-anchor">Deep Funneled Images</a>.<br /><br />
+
+LFW <a href="http://www.cs.columbia.edu/CAVE/databases/pubfig/download/lfw_attributes.txt">attributes file</a> (see <a href="results.html#attsim">Attribute and Simile Classifiers for Face Verification, Kumar et al.</a>).<br /><br />
+
+<a href="http://vis-www.cs.umass.edu/fddb/">Face Detection Data set
+and Benchmark (FDDB)</a>, our new database for face detection
+research.<br /><br />
+
+<a href="http://www.cs.umass.edu/~elm/realfaces/index.html">Faces in
+Real-Life Images</a> workshop at
+the <a href="http://eccv2008.inrialpes.fr/workshops.html">European
+Conference on Computer Vision 2008</a>, run by Erik Learned-Miller,
+Andras Ferencz, and Frederic Jurie.
+</div>
+<i>last updated: 2018/01/09 20:15 EST</i><br />
+<a href="#change">change log</a><br /><br />
+<!-- <dl><dt><a name="mailing" class="anormc"><b>Mailing list:</b></a></dt> -->
+<!-- <dd>If you wish to receive announcements regarding any changes made to the LFW database, please send email to  -->
+<!-- <a href="mailto:lfw-subscribe@cs.umass.edu">lfw-subscribe@cs.umass.edu</a> (subject and body are ignored). -->
+<!-- <\!-- -->
+<!-- <a href="mailto:majordomo@cs.umass.edu">majordomo@cs.umass.edu</a> with the message body: "subscribe lfw" on a single line. -->
+<!-- -\-> -->
+<!-- </dd></dl> -->
+
+<a name="explore" class="anormc"><b>Explore the database:</b></a>
+
+<ul>
+<li class="space">Alphabetically by first name:<br />
+<a href="http://vis-www.cs.umass.edu/lfw/alpha_all_0.html">[A)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_1.html">[Alf)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_2.html">[Ang)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_3.html">[B)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_4.html">[Bin)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_5.html">[C)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_6.html">[Che)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_7.html">[Col)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_8.html">[D)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_9.html">[Daw)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_10.html">[Don)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_11.html">[E)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_12.html">[Eri)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_13.html">[F)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_14.html">[G)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_15.html">[Goe)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_16.html">[H)</a> <a href="http://vis-www.cs.umass.edu/lfw/alpha_all_17.html">[I)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_18.html">[J)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_19.html">[Jav)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_20.html">[Jes)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_21.html">[Joh)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_22.html">[Jos)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_23.html">[K)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_24.html">[Kim)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_25.html">[L)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_26.html">[Lil)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_27.html">[M)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_28.html">[Mark)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_29.html">[Mel)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_30.html">[Mik)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_31.html">[N)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_32.html">[O)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_33.html">[P)</a> <a href="http://vis-www.cs.umass.edu/lfw/alpha_all_34.html">[Per)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_35.html">[Q)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_36.html">[R)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_37.html">[Ric)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_38.html">[Rog)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_39.html">[S)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_40.html">[Sha)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_41.html">[Ste)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_42.html">[T)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_43.html">[Tim)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_44.html">[U)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_45.html">[V)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_46.html">[W)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_47.html">[X)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_48.html">[Y)</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_all_49.html">[Z)</a></li>
+<li class="space">Alphabetically by first name, only people with more than one image:<br />
+<a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_A.html">[A]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_B.html">[B]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_C.html">[C]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_D.html">[D]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_E.html">[E]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_F.html">[F]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_G.html">[G]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_H.html">[H]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_I.html">[I]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_J.html">[J]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_K.html">[K]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_L.html">[L]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_M.html">[M]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_N.html">[N]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_O.html">[O]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_P.html">[P]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_Q.html">[Q]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_R.html">[R]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_S.html">[S]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_T.html">[T]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_U.html">[U]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_V.html">[V]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_W.html">[W]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_X.html">[X]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_Y.html">[Y]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_ns_Z.html">[Z]</a></li>
+<li class="space">Alphabetically by last name:<br />
+<a href="http://vis-www.cs.umass.edu/lfw/alpha_last_A.html">[A]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_B.html">[B]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_C.html">[C]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_D.html">[D]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_E.html">[E]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_F.html">[F]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_G.html">[G]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_H.html">[H]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_I.html">[I]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_J.html">[J]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_K.html">[K]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_L.html">[L]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_M.html">[M]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_N.html">[N]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_O.html">[O]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_P.html">[P]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_Q.html">[Q]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_R.html">[R]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_S.html">[S]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_T.html">[T]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_U.html">[U]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_V.html">[V]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_W.html">[W]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_X.html">[X]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_Y.html">[Y]</a><a href="http://vis-www.cs.umass.edu/lfw/alpha_last_Z.html">[Z]</a></li>
+<li class="space">By number of images per person:<br />
+<a href="http://vis-www.cs.umass.edu/lfw/number_1a.html">[1 A-E]</a><a href="http://vis-www.cs.umass.edu/lfw/number_1f.html">[1 F-J]</a><a href="http://vis-www.cs.umass.edu/lfw/number_1k.html">[1 K-O]</a><a href="http://vis-www.cs.umass.edu/lfw/number_1p.html">[1 P-T]</a><a href="http://vis-www.cs.umass.edu/lfw/number_1u.html">[1 U-Z]</a><a href="http://vis-www.cs.umass.edu/lfw/number_2.html">[2]</a><a href="http://vis-www.cs.umass.edu/lfw/number_3.html">[3]</a><a href="http://vis-www.cs.umass.edu/lfw/number_4.html">[4]</a><a href="http://vis-www.cs.umass.edu/lfw/number_5.html">[5]</a><a href="http://vis-www.cs.umass.edu/lfw/number_6.html">[6-10]</a><a href="http://vis-www.cs.umass.edu/lfw/number_11.html">[11+]</a></li>
+<li class="space"><a href="http://vis-www.cs.umass.edu/lfw/justnames.html">Single page of all names (no thumbnails)</a></li>
+</ul><br />
+
+<a name="download" class="anormc"><b>Download the database:</b></a>
+<ul>
+<li><a href="http://vis-www.cs.umass.edu/lfw/lfw.tgz" onclick="javascript:urchinTracker ('/downloads/lfw.tgz'); ">All images as gzipped tar file</a><br />
+(173MB, md5sum a17d05bd522c52d84eca14327a23d494)<br />
+<!--
+ac79dc88658530a91423ebbba2b07bf3
+<a href="http://vis-www.cs.umass.edu/lfw/lfw.zip" onclick="javascript:urchinTracker ('/downloads/lfw.zip'); ">&nbsp;&nbsp;&nbsp;as zip file</a>
+--> </li>
+<a name="deepfunnel-anchor"></a>
+<li><font color="red">[new] </font><a href="http://vis-www.cs.umass.edu/lfw/lfw-deepfunneled.tgz" onclick="javascript:urchinTracker ('/downloads/lfw-deepfunneled.tgz'); "> All images aligned with deep funneling </a><br />
+(111MB, md5sum 68331da3eb755a505a502b5aacb3c201)<br />
+<ul><li>see <a href="#deep_funnel_cite">here for paper to cite</a>.</li></ul>
+ <!--
+<a href="http://vis-www.cs.umass.edu/lfw/lfw-deepfunneled.zip" onclick="javascript:urchinTracker ('/downloads/lfw-deepfunneled.zip'); ">&nbsp;&nbsp;&nbsp;as zip file</a>
+--></li>
+<li><a href="http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz" onclick="javas<script:urchinTracker ('/downloads/lfw-funneled.tgz'); ">All images aligned with funneling</a><br />
+(233MB, md5sum 1b42dfed7d15c9b2dd63d5e5840c86ad)<br />
+<ul><li>see <a href="#funnel_cite">here for paper to cite</a>.</li></ul>
+<!--
+<a href="http://vis-www.cs.umass.edu/lfw/lfw-funneled.zip" onclick="javascript:urchinTracker ('/downloads/lfw-funneled.zip'); ">&nbsp;&nbsp;&nbsp;as zip file</a>
+--></li>
+<li><a href="http://www.openu.ac.il/home/hassner/data/lfwa/">All images aligned with commercial face alignment software</a> 
+(LFW-a - Taigman, Wolf, Hassner)<br />
+See also LFW3D (frontalized LFW images) under <a href="#resources">LFW resources</a> below.</li>
+
+<li>Superpixel segmentations:
+<ul>
+  <li><a href="http://vis-www.cs.umass.edu/lfw/lfw_superpixels_fine.tgz" onclick="javascript:urchinTracker ('/downloads/lfw_superpixels_fine.tgz'); ">lfw superpixels</a> (328MB, md5sum eb6543ba9bbef54f8ba481c895d3526f)</li>
+  <li><a href="http://vis-www.cs.umass.edu/lfw/lfw-deepfunneled-sp.tgz" onclick="javascript:urchinTracker ('/downloads/lfw-deepfunneled-sp.tgz'); ">lfw deep funneled superpixels</a> (129MB, md5sum 5a166aa967e260aa70d55b5785aa7a61)</li>
+  <li><a href="http://vis-www.cs.umass.edu/lfw/lfw_funneled_superpixels_fine.tgz" onclick="javascript:urchinTracker ('/downloads/lfw_funneled_superpixels_fine.tgz'); ">lfw funneled superpixels</a> (328MB, md5sum f1ede21969d2ad8262a16a26d6212177)</li>
+</ul>
+</li>
+
+<li>To download LFW attribute values (Attribute and Simile Classifiers for Face Verification, Kumar et al.), see the <a href="results.html#attsim">relevant section on the results page</a>.</li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/lfw-a.tgz" onclick="javascript:urchinTracker ('/downloads/lfw-a.tgz'); ">Subset of images - people with name starting with A</a> (14MB)<br />
+<a href="http://vis-www.cs.umass.edu/lfw/lfw-a.zip" onclick="javascript:urchinTracker ('/downloads/lfw-a.zip'); ">&nbsp;&nbsp;&nbsp;as zip file</a></li>
+<li><a href="http://vis-www.cs.umass.edu/lfw/lfw-bush.tgz" onclick="javascript:urchinTracker ('/downloads/lfw-bush.tgz'); ">Subset of images - George_W_Bush</a> (individual person with most images) (6.9MB)<br />
+<a href="http://vis-www.cs.umass.edu/lfw/lfw-bush.zip" onclick="javascript:urchinTracker ('/downloads/lfw-bush.zip'); ">&nbsp;&nbsp;&nbsp;as zip file</a></li>
+<li><a href="http://vis-www.cs.umass.edu/lfw/lfw-names.txt" onclick="javascript:urchinTracker ('/downloads/lfw-names.txt'); ">All names (with number of images for given name) as text file</a></li>
+<li><a href="http://vis-www.cs.umass.edu/lfw/README.txt" onclick="javascript:urchinTracker ('/downloads/README.txt'); ">README</a> - information on file formats and directory structure</li>
+</ul>
+<dl><dt><a name="views" class="anormc"><b>Training, Validation, and Testing:</b></a></dt>
+<dd>
+<dl><dt><b>View 1:</b></dt>
+<dd>For development purposes, we recommend using the below
+training/testing split, which was generated randomly and independently
+of the splits for 10-fold cross validation, to avoid unfairly
+overfitting to the sets above during development. For instance, these
+sets may be viewed as a model selection set and a validation set. See
+the tech report below for more details.<br /><br />
+Explore the sets: 
+<a href="http://vis-www.cs.umass.edu/lfw/devTrain.html">[training]</a><a href="http://vis-www.cs.umass.edu/lfw/devTest.html">[test]</a><br />
+Download the sets: <a href="http://vis-www.cs.umass.edu/lfw/pairsDevTrain.txt" onclick="javascript:urchinTracker ('/downloads/pairsDevTrain.txt'); ">pairsDevTrain.txt</a>, <a href="http://vis-www.cs.umass.edu/lfw/pairsDevTest.txt" onclick="javascript:urchinTracker ('/downloads/pairsDevTest.txt'); ">pairsDevTest.txt</a>, <a href="http://vis-www.cs.umass.edu/lfw/peopleDevTrain.txt" onclick="javascript:urchinTracker ('/downloads/peopleDevTrain.txt'); ">peopleDevTrain.txt</a>, <a href="http://vis-www.cs.umass.edu/lfw/peopleDevTest.txt" onclick="javascript:urchinTracker ('/downloads/peopleDevTest.txt'); ">peopleDevTest.txt</a><br /><br /></dd>
+
+<dt><b>View 2:</b></dt>
+<dd>As a benchmark for comparison, we suggest reporting performance as
+10-fold cross validation using splits we have randomly generated.<br /><br />Explore the sets: 
+<a href="http://vis-www.cs.umass.edu/lfw/sets_1.html">[1]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_2.html">[2]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_3.html">[3]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_4.html">[4]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_5.html">[5]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_6.html">[6]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_7.html">[7]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_8.html">[8]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_9.html">[9]</a><a href="http://vis-www.cs.umass.edu/lfw/sets_10.html">[10]</a><br />
+Download the sets: <a href="http://vis-www.cs.umass.edu/lfw/pairs.txt" onclick="javascript:urchinTracker ('/downloads/pairs.txt'); ">pairs.txt</a>, <a href="http://vis-www.cs.umass.edu/lfw/people.txt" onclick="javascript:urchinTracker ('/downloads/people.txt'); ">people.txt</a><br /><br /></dd></dl>
+
+For information on the file formats, please refer to the README above.<br />
+For details on how the sets were created, please refer to the tech report below.</dd></dl>
+
+<dl><dt><a name="results" class="anormc"><b>Results:</b></a></dt>
+<dd>Accuracy and ROC curves for various methods
+available on <a href="results.html">results page</a>.
+</dd>
+</dl>
+
+<a name="information" class="anormc"><b>Information:</b></a>
+<ul>
+<li>13233 images</li>
+<li>5749 people</li>
+<li>1680 people with two or more images</li>
+</ul>
+
+<dl><dt><a name="errata" class="anormc"><b>Errata:</b></a></dt>
+<dd>
+The following is a list of known errors in LFW.  Due to the small
+number of such errors, the database will be left as is (without
+corrections) to avoid confusion.<br /><br />
+
+It is important that users of the database provide their algorithms
+with the database
+<b>as is</b>, i.e. without correcting the errors below, since previous results published
+for the database did not have the advantage of correcting for these errors.<br/ ><br />
+
+Currently, there are six incorrectly labeled matched pairs in View
+2.  While we do not believe this should have a significant effect on
+accuracy, we do encourage researchers to be aware of these errors when
+producing any visualizations (e.g. matched pairs most confidently
+predicted as mismatched, as the matched pair may actually be
+mismatched).<br /><br />
+
+<b>The current known errors in View 2 are:</b><br />
+<table align="center">
+      <tr>
+	<td valign="bottom">Fold 1:</td>
+	<td valign="top"><a href="person/Janica_Kostelic.html"><img src="images/Janica_Kostelic/Janica_Kostelic_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Janica Kostelic</a>, 1</td>
+	<td valign="top"><a href="person/Janica_Kostelic.html"><img src="images/Janica_Kostelic/Janica_Kostelic_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Janica Kostelic</a>, 2</td>
+      </tr>
+      <tr>
+	<td valign="bottom">Fold 1:</td>
+	<td valign="top"><a href="person/Nora_Bendijo.html"><img src="images/Nora_Bendijo/Nora_Bendijo_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Nora Bendijo</a>, 1</td>
+	<td valign="top"><a href="person/Nora_Bendijo.html"><img src="images/Nora_Bendijo/Nora_Bendijo_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Nora Bendijo</a>, 2</td>
+      </tr>
+      <tr>
+	<td valign="bottom">Fold 1:</td>
+	<td valign="top"><a href="person/Martha_Bowen.html"><img src="images/Martha_Bowen/Martha_Bowen_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Martha Bowen</a>, 1</td>
+	<td valign="top"><a href="person/Martha_Bowen.html"><img src="images/Martha_Bowen/Martha_Bowen_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Martha Bowen</a>, 2</td>
+      </tr>
+      <tr>
+	<td valign="bottom">Fold 5:</td>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 1</td>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 2</td>
+      </tr>
+      <tr>
+	<td valign="bottom">Fold 5:</td>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 1</td>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0003.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 3</td>
+      </tr>
+      <tr>
+	<td valign="bottom">Fold 5:</td>
+	<td valign="top"><a href="person/Elisabeth_Schumacher.html"><img src="images/Elisabeth_Schumacher/Elisabeth_Schumacher_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Elisabeth Schumacher</a>, 1</td>
+	<td valign="top"><a href="person/Elisabeth_Schumacher.html"><img src="images/Elisabeth_Schumacher/Elisabeth_Schumacher_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Elisabeth Schumacher</a>, 2</td>
+      </tr>
+      <tr>
+	<td valign="bottom">Fold 7:</td>
+	<td valign="top"><a href="person/Debra_Messing.html"><img src="images/Debra_Messing/Debra_Messing_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Debra Messing</a>, 1</td>
+	<td valign="top"><a href="person/Debra_Messing.html"><img src="images/Debra_Messing/Debra_Messing_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Debra Messing</a>, 2</td>
+      </tr>
+</table><br />
+
+More detail about all the errors is given below.<br /><br />
+
+Note: unless stated otherwise below, any error in a matched pair will
+mean that the label ("matched") is wrong.  Any error in a mismatched
+pair, even with the person having the wrong identity, will generally
+be correct (the label of "mismatched" will still be correct).<br /><br
+/>
+
+<ul>
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Recep_Tayyip_Erdogan.html">Recep_Tayyip_Erdogan</a>_0004
+    is incorrect (it is an image of Abdullah Gul):<br />
+
+    <img src="images/Recep_Tayyip_Erdogan/Recep_Tayyip_Erdogan_0004.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image appears only in one matched pair in the training set of
+    View 1:
+
+    <table>
+      <tr>
+	<td valign="top"><a href="person/Recep_Tayyip_Erdogan.html"><img src="images/Recep_Tayyip_Erdogan/Recep_Tayyip_Erdogan_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Recep Tayyip Erdogan</a>, 2</td>
+	<td valign="top"><a href="person/Recep_Tayyip_Erdogan.html"><img src="images/Recep_Tayyip_Erdogan/Recep_Tayyip_Erdogan_0004.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Recep Tayyip Erdogan</a>, 4</td>
+      </tr>
+    </table>
+
+    <br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Anja_Paerson.html">Anja_Paerson</a>_0001
+  is incorrect (it is an image of Janica Kostelic):<br />
+
+  <img src="images/Anja_Paerson/Anja_Paerson_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image does not appear in a matched or mismatched pair, in either view.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Janica_Kostelic.html">Janica_Kostelic</a>_0001
+    is incorrect (it is an image of Anja Paerson):<br />
+
+    <img src="images/Janica_Kostelic/Janica_Kostelic_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image appears in one matched pair in the test set of View 1,
+    and the same matched pair and one mismatched pair (with
+    Don_Carcieri_0001) in fold 1 of View 2:
+
+    <table>
+      <tr>
+	<td valign="top"><a href="person/Janica_Kostelic.html"><img src="images/Janica_Kostelic/Janica_Kostelic_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Janica Kostelic</a>, 1</td>
+	<td valign="top"><a href="person/Janica_Kostelic.html"><img src="images/Janica_Kostelic/Janica_Kostelic_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Janica Kostelic</a>, 2</td>
+      </tr>
+    </table>
+
+    <br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Bart_Hendricks.html">Bart_Hendricks</a>_0001
+    is incorrect (it is a duplicate image of Ricky_Ray_0001):<br />
+
+    <img src="images/Bart_Hendricks/Bart_Hendricks_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image appears in two mismatched pairs in the training set of
+    View 1, and one mismatched pair in fold 2 of View 2.  (None of the
+    mismatched pairs are with Ricky_Ray.)
+
+    <br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Carlos_Beltran.html">Carlos_Beltran</a>_0001
+    is incorrect (it is a duplicate image of Raul_Ibanez_0001): <br /> 
+
+    <img src="images/Carlos_Beltran/Carlos_Beltran_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image appears in one mismatched pair in the test set of View
+    1, and one mismatched pair in fold 5 of View 2.  (None of the
+    mismatched pairs are with Raul_Ibanez.)
+
+    <br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Emmy_Rossum.html">Emmy_Rossum</a>_0001
+    is incorrect (it is a duplicate image of Eva_Amurri_0001): <br />
+
+    <img src="images/Emmy_Rossum/Emmy_Rossum_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image appears in one mismatched pair in the test set of View
+    1 (the mismatched pair is not with Eva_Amurri).
+
+    <br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Michael_Schumacher.html">Michael_Schumacher</a>_0008
+    is incorrect (it is an image of Rubens Barrichello): <br />
+
+    <img src="images/Michael_Schumacher/Michael_Schumacher_0008.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image does not appear in a matched or mismatched pair, in
+    either view.
+
+    <br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Mahmoud_Abbas.html">Mahmoud_Abbas</a>_0012
+    is incorrect (it is an image of Hamad Bin Isa al-Khalifa): <br />
+    
+    <img src="images/Mahmoud_Abbas/Mahmoud_Abbas_0012.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+    This image does not appear in a matched or mismatched pair, in
+    either view.
+
+    <br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Jim_OBrien.html">Jim_OBrien</a>
+    contains two distinct persons.  Specifically, Jim_OBrien_0001 is a
+    different person from Jim_OBrien_0002, Jim_OBrien_0003.<br /><br />
+
+    This leads to an error in two matched pairs (0001 with 0002; 0001
+    with 0003), present in both the training set of View 1 and fold 5 of View 2:
+
+    <table>
+      <tr>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 1</td>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 2</td>
+      </tr>
+      <tr>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 1</td>
+	<td valign="top"><a href="person/Jim_OBrien.html"><img src="images/Jim_OBrien/Jim_OBrien_0003.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Jim OBrien</a>, 3</td>
+      </tr>
+    </table>
+
+    <br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/John_Gruden.html">John_Gruden</a>_0001
+  is an incorrect spelling of <a href="http://vis-www.cs.umass.edu/lfw/person/Jon_Gruden.html">Jon_Gruden</a>.
+  <br />
+  <img src="images/John_Gruden/John_Gruden_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image appears in a mismatched pair in fold 3 of View 2 (not with Jon_Gruden).<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Elisabeth_Schumacher.html">Elisabeth_Schumacher</a> contains
+  two distinct persons, where the correct spelling of Elisabeth_Schumacher_0001 is actually Elizabeth Schumacher.
+  This leads to a incorrect matched pair in both the test set of View 1 and fold 5 of View 2.
+
+    <table>
+      <tr>
+	<td valign="top"><a href="person/Elisabeth_Schumacher.html"><img src="images/Elisabeth_Schumacher/Elisabeth_Schumacher_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Elisabeth Schumacher</a>, 1</td>
+	<td valign="top"><a href="person/Elisabeth_Schumacher.html"><img src="images/Elisabeth_Schumacher/Elisabeth_Schumacher_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Elisabeth Schumacher</a>, 2</td>
+      </tr>
+    </table>
+    <br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Andrew_Gilligan.html">Andrew_Gilligan</a>_0001
+  is actually an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Andrew_Caldecott.html">Andrew_Caldecott</a>.
+  <br />
+  <img src="images/Andrew_Gilligan/Andrew_Gilligan_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image appears in a mismatched pair in the training set of View 1 and in fold 1 of View 2 (neither with Andrew_Caldecott).<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Nora_Bendijo.html">Nora_Bendijo</a>_0002
+  is actually an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Flor_Montulo.html">Flor Montulo</a>, and
+  <a href="http://vis-www.cs.umass.edu/lfw/person/Flor_Montulo.html">Flor_Montulo</a>_0002
+  is actually an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Nora_Bendijo.html">Nora_Bendijo</a>
+  <br />
+
+    <table>
+      <tr>
+	<td valign="top"><a href="person/Nora_Bendijo.html"><img src="images/Nora_Bendijo/Nora_Bendijo_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Nora Bendijo</a>, 1<br />correct label</td>
+	<td valign="top"><a href="person/Nora_Bendijo.html"><img src="images/Nora_Bendijo/Nora_Bendijo_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Nora Bendijo</a>, 2<br />is actually Flor Montulo</td>
+      </tr>
+      <tr>
+	<td valign="top"><a href="person/Flor_Montulo.html"><img src="images/Flor_Montulo/Flor_Montulo_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Flor Montulo</a>, 1<br />correct label</td>
+	<td valign="top"><a href="person/Flor_Montulo.html"><img src="images/Flor_Montulo/Flor_Montulo_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br />Flor Montulo</a>, 2<br />is actually Nora Bendijo</td>
+      </tr>
+    </table>
+
+  Nora_Bendijo_0002 appears in an incorrect matched pair in fold 1 of View 2.<br />
+  Flor_Montulo_0002 appears in an incorrect matched pair in the test set of View 1, and in a mismatched pair in fold 1 of View 2, but not with 
+    Nora_Bendijo.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Wang_Yingfan.html">Wang_Yingfan</a> and 
+  <a href="http://vis-www.cs.umass.edu/lfw/person/Yingfan_Wang.html">Yingfan_Wang</a>
+  are the same person.  The two names are never together in a
+  mismatched pair.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Wang_Nan.html">Wang_Nan</a> and 
+  <a href="http://vis-www.cs.umass.edu/lfw/person/Nan_Wang.html">Nan_Wang</a>
+  are the same person.  The two names are never together in a
+  mismatched pair.<br /><br /></li>
+
+<!--
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Eric_Christian_Olsen.html">Eric_Christian_Olsen</a>_0001
+  is actually an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Jim_Carrey.html">Jim_Carrey</a>.
+  <br />
+  <img src="images/Eric_Christian_Olsen/Eric_Christian_Olsen_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image never appears in a mismatched pair with an image of Jim Carrey.<br /><br /></li>
+-->
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Talisa_Bratt.html">Talisa_Bratt</a> and <a href="http://vis-www.cs.umass.edu/lfw/person/Talisa_Soto.html">Talisa_Soto</a> are the same person.<br />
+
+<img src="images/Talisa_Bratt/Talisa_Bratt_0001.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+<img src="images/Talisa_Soto/Talisa_Soto_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  These images never appear in a mismatched pair together.<br /><br />
+</li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Shinya_Taniguchi.html">Shinya_Taniguchi</a>_0001
+  is actually an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Takahiro_Mori.html">Takahiro_Mori</a>.
+  <br />
+  <img src="images/Shinya_Taniguchi/Shinya_Taniguchi_0001.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+  <img src="images/Takahiro_Mori/Takahiro_Mori_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image never appears in a mismatched pair with an image of Takahiro_Mori.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Sung_Hong_Choi.html">Sung_Hong_Choi</a>_0001
+  is an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Choi_Sung-hong.html">Choi_Sung-hong</a>.
+  <br />
+  <img src="images/Sung_Hong_Choi/Sung_Hong_Choi_0001.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+  <img src="images/Choi_Sung-hong/Choi_Sung-hong_0003.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image never appears in a mismatched pair with an image of Choi_Sung-hong.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Martha_Bowen.html">Martha_Bowen</a>_0002
+  is actually an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Gabrielle_Rose.html">Gabrielle_Rose</a>.
+  <br />
+  <img src="images/Martha_Bowen/Martha_Bowen_0002.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+  <img src="images/Gabrielle_Rose/Gabrielle_Rose_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image never appears in a mismatched pair with an image of
+  Gabrielle_Rose.  However, the incorrect matched pair
+  Martha_Bowen_0001, Martha_Bowen 0002 does appear in the training set of View 1 and fold 1 of View 2.<br /><br /></li>
+
+<li>The following is a correct labeling: <a href="http://vis-www.cs.umass.edu/lfw/person/Tamara_Mowry.html">Tamara_Mowry</a>_0001,
+  <a href="http://vis-www.cs.umass.edu/lfw/person/Tia_Mowry.html">Tia_Mowry</a>_0001 (twins).
+  <br />
+  <img src="images/Tamara_Mowry/Tamara_Mowry_0001.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+  <img src="images/Tia_Mowry/Tia_Mowry_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  However, these images never appear together in a mismatched pair.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Carlos_Ruckauf.html">Carlos_Ruckauf</a>_0001
+  is an image of <a href="http://vis-www.cs.umass.edu/lfw/person/Eduardo_Duhalde.html">Eduardo_Duhalde</a>.
+  <br />
+  <img src="images/Carlos_Ruckauf/Carlos_Ruckauf_0001.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+  <img src="images/Eduardo_Duhalde/Eduardo_Duhalde_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image never appears in a mismatched pair with an image of Eduardo_Duhalde.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Claire_Hentzen.html">Claire_Hentzen</a>_0001, 0002
+  are images of <a href="http://vis-www.cs.umass.edu/lfw/person/Morgan_Hentzen.html">Morgan_Hentzen</a>.
+  <br />
+  <img src="images/Claire_Hentzen/Claire_Hentzen_0001.jpg" width="120" height="120" alt="person image" style="border:none;" />&nbsp;
+  <img src="images/Morgan_Hentzen/Morgan_Hentzen_0001.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  These images never appear in a mismatched pair with an image of Morgan_Hentzen.<br /><br /></li>
+
+<li><a href="http://vis-www.cs.umass.edu/lfw/person/Debra_Messing.html">Debra_Messing</a>_0002
+  is incorrect (it is actually an image of Ruve Robertson, who does not appear in the database).
+  <br />
+  <img src="images/Debra_Messing/Debra_Messing_0002.jpg" width="120" height="120" alt="person image" style="border:none;" /><br /><br />
+
+  This image appears in a matched pair in fold 7 of View 2.<br /><br /></li>
+
+</ul>
+</dd></dl>
+
+<dl><dt><a name="reference" class="anormc"><b>Reference:</b></a></dt>
+<dd>Please cite as:<br /><br />
+<a href="http://vis-www.cs.umass.edu/%7Egbhuang">Gary B. Huang</a>, Manu Ramesh, <a href="http://research.yahoo.com/bouncer_user/83">Tamara Berg</a>, and <a href="http://www.cs.umass.edu/%7Eelm">Erik Learned-Miller</a>.<br />
+<b>Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments.</b><br />
+<i>University of Massachusetts, Amherst, Technical Report 07-49</i>, October, 2007.<br />
+<a href="http://vis-www.cs.umass.edu/lfw/lfw.pdf">[pdf]</a><br /><br />
+
+BibTeX entry:
+<pre>
+@TechReport{LFWTech,
+  author =       {Gary B. Huang and Manu Ramesh and Tamara Berg and 
+                  Erik Learned-Miller},
+  title =        {Labeled Faces in the Wild: A Database for Studying 
+                  Face Recognition in Unconstrained Environments},
+  institution =  {University of Massachusetts, Amherst},
+  year =         2007,
+  number =       {07-49},
+  month =        {October}}
+</pre>
+
+<a href="http://vis-www.cs.umass.edu/%7Egbhuang">Gary B. Huang</a> and <a href="http://www.cs.umass.edu/%7Eelm">Erik Learned-Miller</a>.<br />
+<b>Labeled Faces in the Wild: Updates and New Reporting Procedures.</b><br />
+<i>University of Massachusetts, Amherst, Technical Report UM-CS-2014-003</i>, May, 2014.<br />
+<a href="http://vis-www.cs.umass.edu/lfw/lfw_update.pdf">[pdf]</a><br />
+
+<pre>
+@TechReport{LFWTechUpdate,
+  author =       {Gary B. Huang Erik Learned-Miller},
+  title =        {Labeled Faces in the Wild: Updates and New Reporting 
+                  Procedures},
+  institution =  {University of Massachusetts, Amherst},
+  year =         2014,
+  number =       {UM-CS-2014-003},
+  month =        {May}}
+</pre>
+
+<a name="lfw_survey" class="anormc"><b>LFW survey paper</b></a><br /><br />
+
+Erik Learned-Miller, Gary B. Huang, Aruni RoyChowdhury, Haoxiang Li, and Gang Hua.<br />
+<b>Labeled Faces in the Wild: A Survey.</b><br />
+In <i>Advances in Face Detection and Facial Image Analysis</i>, edited by Michal Kawulok, M. Emre Celebi, and Bogdan Smolka, Springer, pages 189-248, 2016.<br />
+[<a href="http://link.springer.com/book/10.1007/978-3-319-25958-1">Springer Page</a>] [<a href="https://people.cs.umass.edu/~elm/papers/LFW_survey.pdf">Draft pdf</a>]<br /><br />
+
+<a name="funnel_cite" class="anormc"><b>LFW funneled images</b></a><br />
+If you use the LFW images aligned by funneling, please cite:<br />
+Gary B. Huang, <a href="http://vis-www.cs.umass.edu/~vidit/">Vidit
+Jain</a>, and <a href="http://people.cs.umass.edu/~elm/">Erik
+Learned-Miller</a>.  <br />
+    <b><a href="http://vis-www.cs.umass.edu/papers/iccv07alignment.pdf">Unsupervised
+    joint alignment of complex images</a>.</b>  <br />
+    <i>International Conference on Computer Vision (ICCV)</i>,
+    2007.<br />
+
+<pre>
+@InProceedings{Huang2007a,
+  author =    {Gary B. Huang and Vidit Jain and Erik Learned-Miller},
+  title =     {Unsupervised Joint Alignment of Complex Images},
+  booktitle = {ICCV},
+  year =      {2007}
+}
+</pre>
+
+<a name="deep_funnel_cite" class="anormc"><b>LFW deep funneled images</b></a><br /> 
+If you use the LFW imaged aligned by deep funneling, please cite:<br />
+Gary B. Huang, <a href="http://vis-www.cs.umass.edu/~mmattar">Marwan
+Mattar</a>, <a href="http://web.eecs.umich.edu/~honglak/">Honglak
+Lee</a>, and <a href="http://www.cs.umass.edu/~elm">Erik
+Learned-Miller</a>.<br />
+  <b><a href="http://vis-www.cs.umass.edu/papers/nips2012_deep_congealing.pdf">Learning
+  to Align from Scratch</a>.</b><br />
+  <i>Advances in Neural Information Processing Systems (NIPS)</i>, 2012.
+
+<pre>
+@InProceedings{Huang2012a,
+  author =    {Gary B. Huang and Marwan Mattar and Honglak Lee and 
+               Erik Learned-Miller},
+  title =     {Learning to Align from Scratch},
+  booktitle = {NIPS},
+  year =      {2012}
+}
+</pre>
+
+</dd></dl>
+<dl><dt><a name="resources" class="anormc"><b>Resources:</b></a></dt>
+<dd>Collected resources related to LFW:<br />
+<i>Note: We have not verified the accuracy or reliability of the code
+and data at the following links; we merely provide them as a
+convenience.  Please use your own judgment about the accuracy of the
+resources below.</i><br /><br />
+<ul>
+<li><a href="http://www.whdeng.cn/FGLFW/FGLFW.html">Fine-grained LFW (FGLFW)</a><br /><br />
+"Common face verification addresses mainly large intra-class
+variations, such as pose, illumination, and expression. After
+inspecting the LFW databases, one can identify a main limiting factor
+for its unconstrained face verification task: almost all the negative
+face pairs are quite easy to distinguish. Thus, verification is, by its
+nature a problem in which many examples are very easy with large
+inter-class variance, because the collection of LFW database is based
+on the assumption of random imposter attack. For practical usage,
+however, it is likely that a desperate impostor may attempt to spoof a
+genuine user by seeking a similarly-looking people. To simulate this
+deliberate imposture attack, we construct FGLFW database, which
+deliberately selects 3000 similarly-looking face pairs within original
+image folders by human crowdsourcing to replace the random negative
+pairs in LFW."<br /><br />
+</li>
+<li>LFW gender labeling<br /><br />
+<a href="http://bit.ly/lfw-gender">Manually verified LFW gender
+labels</a>, from:<br /><br />
+
+Mahmoud Afifi, Abdelrahman
+Abdelhamed. <a href="https://arxiv.org/abs/1706.04277">AFIF4: Deep
+Gender Classification based on AdaBoost-based Fusion of Isolated
+Facial Features and Foggy Faces</a>, 2017.<br /><br />
+
+"In order to label the images based on gender, we used the attribute
+values presented by Kumar et al. [1].  Then, we used the genderize.io
+API to estimate the gender based on the first name of each face image
+in the LFW. Eventually, we manually reviewed each category of male and
+female images three times to completely eliminate any incorrect
+labels.<br /><br />
+
+[1] N. Kumar, A. Berg, P. N. Belhumeur, S. Nayar, Describable visual
+attributes for face verification and image search, IEEE Transactions
+on Pattern Analysis and Machine Intelligence 33 (10) (2011)
+1962–1977."<br /><br />
+
+</li>
+<li><a href="https://github.com/Pletron/LFWgender">LFWgender</a><br /><br />
+"Getting the known gender based on name of each image in the Labeled
+Faces in the Wild dataset.  This is a python script that calls the
+genderize.io API with the first name of the person in the image."<br /><br />
+</li>
+<li><a href="http://www.cbsr.ia.ac.cn/english/CASIA-WebFace-Database.html">CASIA
+WebFace Database</a><br /><br /> "While there are many open source
+implementations of CNN, none of large scale face dataset is publicly
+available. The current situation in the field of face recognition is
+that data is more important than algorithm. To solve this problem, we
+propose a semi-automatical way to collect face images from Internet
+and build a large scale dataset containing 10,575 subjects and 494,414
+images, called CASIA-WebFace. To the best of our knowledge, the size
+of this dataset rank second in the literature, only smaller than the
+private dataset of Facebook (SCF). We encourage those data-consuming
+methods training on this dataset and reporting performance on
+LFW. "<br /><br />
+</li>
+<li><a href="http://www.openu.ac.il/home/hassner/projects/frontalize">LFW3D</a>
+- collection of frontalized LFW images and Matlab code for frontalization<br /><br />
+
+"Frontalization is the process of synthesizing frontal facing views of
+faces appearing in single unconstrained photos. Recent reports have
+suggested that this process may substantially boost the performance of
+face recognition systems...  we explore the simpler approach of using
+a single, unmodified, 3D surface as an approximation to the shape of
+all input faces. We show that this leads to a straightforward,
+efficient and easy to implement method for frontalization. More
+importantly, it produces aesthetic new frontal views and is
+surprisingly effective when used for face recognition and gender
+estimation."<br /><br />
+</li>
+</ul>
+</dd></dl>
+<dl><dt><a name="contact" class="anormc"><b>Contact:</b></a></dt>
+<dd>Questions and comments can be sent to:<br /><a href="mailto:gbhuang@cs.umass.edu">Gary Huang - gbhuang@cs.umass.edu</a></dd></dl>
+
+<dl><dt><a name="support" class="anormc"><b>Support:</b>
+</a></dt><dd>
+The building of the LFW database was supported by NSF CAREER Award number 0546666.
+</dd></dl>
+
+<dl><dt><a name="change" class="anormc"><b>Change History:</b>
+</a></dt><dd>
+<dl><dt>2018/01/09</dt>
+<dd>Updated <a href="#errata">Errata</a>, in particular listing one incorrect matched pair that appears in Fold 7 of View 2.</dd>
+<dl><dt>2017/03/01</dt>
+<dd>Updated <a href="#errata">Errata</a>, in particular listing one incorrect matched pair that appears in Fold 1 of View 2.</dd>
+<dl><dt>2015/09/22</dt>
+<dd>Added Ding et al.<sup><a href="results.html#mdml_dcp">*</a></sup>, Ding and Tao<sup><a href="results.html#mmdfr">*</a></sup>, and Xu et al.<sup><a href="results.html#spartans">*</a></sup> to <a href="results.html">results page</a>.</dd>
+<dl><dt>2015/07/31</dt>
+<dd>Updated <a href="#errata">Errata</a>.  Added Baidu, AuthenMetric commercial system results to <a href="results.html">results page</a>.</dd>
+<dl><dt>2015/06/03</dt>
+<dd>Updated <a href="#errata">Errata</a>.</dd>
+<dl><dt>2015/05/19</dt>
+<dd>Updated <a href="#errata">Errata</a>.</dd>
+<dl><dt>2015/04/13</dt>
+<dd>Added Sun et al.<sup><a href="results.html#deepid3">*</a></sup>, Li and Hua<sup><a href="results.html#pop-pep">*</a></sup>, updated
+betaface.com commercial system<sup><a href="results.html#betaface">*</a></sup>, on <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2015/01/19</dt>
+<dd>Updated Face++ commercial system result<sup><a href="results.html#facepp">*</a></sup>, added betaface.com commercial system result<sup><a href="results.html#betaface">*</a></sup> on <a href="results.html">results page.</a></dd></dl>
+<dl><dt>2014/12/09</dt>
+<dd>Added Ouamane et
+al.<sup><a href="results.html#mbsifh">*</a></sup> and
+Sun et al.<sup><a href="results.html#deepid2+">*</a></sup>
+to <a href="results.html">results page</a>.
+</dd></dl>
+<dl><dt>2014/12/08</dt>
+<dd>Added new <a href="#resources">LFW-related resources
+section</a>.<br />  Added Hassner et
+al.<sup><a href="results.html#frontalized">*</a></sup> and
+TCIT<sup><a href="results.html#tcit">*</a></sup>
+to <a href="results.html">results page</a>.
+</dd></dl>
+<dl><dt>2014/12/03</dt>
+<dd>Added Hu et al.<sup><a href="results.html#lm3l">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/12/01</dt>
+<dd>Added Arashloo and Kittler<sup><a href="results.html#mrf-cskda">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/09/19</dt>
+<dd>Added Li et al.<sup><a href="results.html#eigenpep">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/06/20</dt>
+<dd>Added Sun et al.<sup><a href="results.html#deepid2">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/06/16</dt>
+<dd>Added Lu and Tang<sup><a href="results.html#gaussianface">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/06/12</dt>
+<dd>Added Sun et al.<sup><a href="results.html#deepid">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/05/28</dt>
+<dd>Added AUC for two unsupervised methods - LHS and MRF-MLBP - to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/05/23</dt>
+<dd>Added Zhu et al.<sup><a href="results.html#canonical">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/05/22</dt>
+<dd>Updated Kumar et al.<sup><a href="results.html#attsim">*</a></sup> with results from journal paper, and added Berg and Belhumeur<sup><a href="results.html#poof">*</a></sup>, on <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/05/21</dt>
+<dd>Added Sun et al.<sup><a href="results.html#convnet-rbm">*</a></sup> and Hu et al.<sup><a href="results.html#ddml">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/05/19</dt>
+<dd>Added Taigman et al.<sup><a href="results.html#deepface">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2014/05/09</dt>
+<dd>Re-organized <a href="results.html">results page</a> to more
+accurately and fairly compare algorithms under a variety of protocols.  See the <a href="lfw_update.pdf">new technical report</a> for details of the changes.</dd></dl>
+<dl><dt>2014/03/17</dt>
+<dd>Added Face++ commercial system result<sup><a href="results.html#facepp">*</a></sup> to <a href="results.html">results page.</a></dd></dl>
+<dl><dt>2014/02/10</dt>
+<dd>Added Aurora Computer Services commercial system result<sup><a href="results.html#aurora">*</a></sup> to <a href="results.html">results page.</a></dd></dl>
+<dl><dt>2014/01/09</dt>
+<dd>Added VisionLabs commercial system result<sup><a href="results.html#visionlabs">*</a></sup> to <a href="results.html">results page.</a></dd></dl>
+<dl><dt>2013/12/08</dt>
+<dd>Added John_Gruden_0001 labeling error to <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2013/10/18</dt>
+<dd>Added Cao et al.<sup><a href="results.html#tl_joint_bayesian">*</a></sup>, 
+          Cao et al.<sup><a href="results.html#sub-sml">*</a></sup>, and 
+          Barkan et al.<sup><a href="results.html#VMRS">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/10/08</dt>
+<dd>Added Lei et al.<sup><a href="results.html#dfd">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/08/23</dt>
+<dd>Added new deep funneled images and corresponding deep funneled superpixels for download. (CJG)</dd></dl>
+<dl><dt>2013/08/12</dt>
+<dd>Temporarily disabled deep funneled data set download. (CJG)</dd></dl>
+<dl><dt>2013/08/09</dt>
+<dd>Removed superpixel images from database gallery. Added deep funnel aligned images to database gallery. (CJG) </dd></dl>
+<dl><dt>2013/08/08</dt>
+<dd>Added deep funneled aligned image set to main page. (CJG)</dd></dl>
+<dl><dt>2013/07/28</dt>
+<dd>Added Simonyan et al.<sup><a href="results.html#fisher">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/07/13</dt>
+<dd>Added Yi et al.<sup><a href="results.html#paf">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/07/13</dt>
+<dd>Added Arashloo and Kittler<sup><a href="results.html#emrfs">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/06/12</dt>
+<dd>Added Sharma et al.<sup><a href="results.html#lhs">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/05/12</dt>
+<dd>Added Zhen et al.<sup><a href="results.html#sfrd">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/05/02</dt>
+<dd>Added Chen et al.<sup><a href="results.html#cjb">*</a></sup> and Chen et al.<sup><a href="results.html#hdlbp">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2013/04/17</dt>
+<dd>Added Anja_Paerson_0001 labeling error to  <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2013/03/21</dt>
+<dd>Added Li et al.<sup><a href="results.html#apem">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2012/08/17</dt>
+<dd>Added Hussain et al.<sup><a href="results.html#lpq">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2012/07/18</dt>
+<dd>Added Berg and Belhumeur<sup><a href="results.html#his_her">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2012/03/03</dt>
+<dd>Added Huang et al.<sup><a href="results.html#cmd_slbp">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2011/12/14</dt>
+<dd>Added Ying and Li<sup><a href="results.html#dml-eig">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2011/09/07</dt>
+<dd>Added link to download computed attribute values for all LFW images produced by Kumar et al., on the <a href="results.html#attsim">results page</a>.</dd></dl>
+<dl><dt>2011/08/28</dt>
+<dd>Added Seo and Milanfar<sup><a href="results.html#lark">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2011/08/08</dt>
+<dd>Added images of incorrectly labeled faces, in <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2011/08/08</dt>
+<dd>Added Taigman and Wolf<sup><a href="results.html#facecomr2011b">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2011/08/01</dt>
+<dd>Added Jim_OBrien_0001 labeling error to <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2011/07/18</dt>
+<dd>Updated the <a href="results.html">results page</a>, adding notes
+on the use of external training data, arranging the image-restricted
+method results to roughly reflect the amount of external training data
+used, and added specific notes on the type of external training data
+used for each algorithm.</dd></dl>
+<dl><dt>2011/07/12</dt>
+<dd>Added Mahmoud_Abbas_0012 labeling error to <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2011/06/28</dt>
+<dd>Added Yin et al.<sup><a href="results.html#associatepredict">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2011/04/28</dt>
+<dd>Added superpixel segmentation files to <a href="#download">downloads section</a>.</dd></dl>
+<dl><dt>2011/04/04</dt>
+<dd>Added Li et al.<sup><a href="results.html#plda">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2011/01/29</dt>
+<dd>Added Pinto and Cox<sup><a href="results.html#brain">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2010/11/17</dt>
+<dd>Added link to related
+database: <a href="http://vis-www.cs.umass.edu/fddb/">Face Detection
+Data set and Benchmark (FDDB)</a>.</dd></dl>
+<dl><dt>2010/10/26</dt>
+<dd>Added Nguyen and Bai<sup><a href="results.html#csml">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2010/09/07</dt>
+<dd>Added Michael_Schumacher_0008 labeling error to <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2010/04/17</dt>
+<dd>Added Cao et al.<sup><a href="results.html#ledesc">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2010/02/08</dt>
+<dd>Added Ruiz-del-Solar et al.<sup><a href="results.html#study">*</a></sup> and unsupervised (no training data) results to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2009/10/26</dt>
+<dd>Added Kumar et al.<sup><a href="results.html#attsim">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2009/09/24</dt>
+<dd>Added link
+to <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>,
+LFW images aligned with commercial face alignment software, from Taigman, Wolf, and Hassner, under <a href="#download">downloads</a>.</dd></dl>
+<dl><dt>2009/09/02</dt>
+<dd>Added Wolf et al.<sup><a href="results.html#combined-bg">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2009/08/03</dt>
+<dd>Added Taigman et al.<sup><a href="results.html#multishot">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2009/07/02</dt>
+<dd>Added Guillaumin et al.<sup><a href="results.html#guillaumin">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2009/06/24</dt>
+<dd>Added Carlos_Beltran_0001 and Emmy_Rossum_0001 labeling errors to <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2009/04/02</dt>
+<dd>Added Pinto et al.<sup><a href="results.html#pinto">*</a></sup> to <a href="results.html">results page</a>.</dd></dl>
+<dl><dt>2009/02/04</dt>
+<dd>Added Bart_Hendricks_0001 labeling error to <a href="#errata">Errata</a>.</dd></dl>
+<dl><dt>2008/07/01</dt>
+<dd>Updated LFW technical report with proper reference for VidTIMIT:<br />
+C. Sanderson.<br />
+Biometric Person Recognition: Face, Speech and Fusion.<br />
+VDM-Verlag, 2008.<br />
+ISBN 978-3-639-02769-3
+</dd></dl>
+<dl><dt>2008/06/12</dt>
+<dd>Added <a href="#errata">Errata</a> section and listed two known labeling errors.</dd></dl>
+<dl><dt>2008/02/04</dt>
+<dd>Added funneled images and super-pixels images
+to person pages.  <br />
+Made all funneled images available 
+as single downloadable file.</dd></dl>
+<dl><dt>2008/01/25</dt>
+<dd>Added <a href="results.html">results page</a> with numbers
+for method of Nowak and Jurie, CVPR 2007.</dd></dl>
+<dl><dt>2007/11/21</dt>
+<dd>Added revised version of technical report.</dd></dl>
+<dl><dt>2007/11/19</dt>
+<dd>Added technical report to page.</dd></dl>
+<dl><dt>2007/11/15</dt>
+<dd>Added mailing list and change history to page.</dd></dl>
+</dd></dl>
+
+</div>
+
+                </div>
+                <div class="clearer"></div>
+            </div>
+        </div>
+
+        <div id="footer">
+
+        </div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2784021-1";
+urchinTracker();
+</script>
+    </body>
+</html>

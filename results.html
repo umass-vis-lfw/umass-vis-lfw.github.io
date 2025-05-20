@@ -1,0 +1,2973 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xml:lang="en" lang="en">
+  
+<!--
+// The Vision Lab template
+//   search for CHANGEME to find places to insert text
+//   by default uses the css located at https://vis-www.cs.umass.edu/css/notsosimple.css
+//   if you want to edit this, make your own copy of this file as well as the contents
+//   of css/image/
+//
+// Derived From: (leave this note in place)
+//
+// Copyright (C) Julian I. Kamil <julian.kamil@gmail.com>
+// No warranty is provided.  Use at your own risk.
+//
+// Commercial support is available through ESV Media Group
+// who can be reached at: http://www.ESV-i.com/.
+//
+// Name: simple.tmpl
+// Author: Julian I. Kamil <julian.kamil@gmail.com>
+// Created: 2005-05-18
+// Description:
+//     This is a simple skin for PmWiki. Please see:
+//         http://www.madhckr.com/project/PmWiki/SimpleSkin
+//     for a live example and doumentation.
+//
+// $Id: simple.tmpl,v 1.1 2005/08/17 19:24:54 julian Exp $
+//
+//
+-->
+
+    <head>
+        <title>LFW : Results</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--HeaderText-->
+        <link rel='stylesheet' title="(NotSo) Simple" href='https://vis-www.cs.umass.edu/css/notsosimple.css' type='text/css' />
+
+	<script language="JavaScript">
+	  if(document.images)
+	  {
+	    lfw_unrestricted_labeled = new Array();
+	    lfw_unrestricted_labeled[0] = new Image(); lfw_unrestricted_labeled[0].src = "lfw_unrestricted_labeled.png";
+	    lfw_unrestricted_labeled[1] = new Image(); lfw_unrestricted_labeled[1].src = "lfw_unrestricted_labeled_zm.png";
+	    lfw_unrestricted_labeled[2] = new Image(); lfw_unrestricted_labeled[2].src = "lfw_unrestricted_labeled_zm2.png";
+	    lfw_unrestricted_labeled_index = 0;
+	  }
+	  function mouseClick()
+	  {
+	    if(document.images)
+	    {
+	    lfw_unrestricted_labeled_index = (lfw_unrestricted_labeled_index + 1) % lfw_unrestricted_labeled.length;
+	    document.lfw_unrestricted_labeled_img.src = lfw_unrestricted_labeled[lfw_unrestricted_labeled_index].src;
+	    }
+	  }
+	</script>
+    </head>
+
+<body>	    
+    <div id="header">
+        <div id="page-title">Labeled Faces in the Wild</div>
+    </div>
+
+    <div id="main">
+        <div class="content-mat">
+            <div id="content">
+                <div id='sidebar'>
+
+<img src="umasslogo.gif" alt="umass seal" width="100" /><br /><br />
+
+<h3>Menu</h3>
+<ul>
+<li><a href="index.html">LFW Home</a></li>
+<li><a href="http://vis-www.cs.umass.edu">UMass Vision</a></li>
+</ul><br />
+
+</div>
+                    <!--PageText-->
+<div id='wikitext'>
+<h1>Results</h1>
+<hr />
+<p class='vspace'></p>
+
+<i>Note: As of June, 2020, we will only be posting new results that
+exceed the existing state-of-the-art within a given results
+category.</i><br /><br />
+
+<div style="border: thin dashed rgb(255, 0, 0); margin: 20px; padding: 5px;">
+
+<span style="font-variant:small-caps;">New results page:<br /><br />
+
+<!-- We have recently updated and changed the format and content of our -->
+<!-- results page.   -->
+
+Please refer to the <a href="lfw_update.pdf">new
+technical report</a> for details of the changes.<span>
+
+</div>
+
+<div style="border: thin dashed rgb(255, 0, 0); margin: 20px; padding: 5px;">
+
+<center>
+<span style="font-variant:small-caps;">DISCLAIMER:</span><br /><br />
+</center>
+
+Labeled Faces in the Wild is a public benchmark for face verification,
+also known as pair matching.  No matter what the performance of an
+algorithm on LFW, it should not be used to conclude that an algorithm
+is suitable for any commercial purpose. [<a href="index.html#lfw_disclaimer">Read more</a>]
+</div>
+
+<div style="border-left: thin dashed rgb(9, 74, 140); margin: 20px; padding: 5px;">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li>LFW Results by Category
+  <ul>
+  <li><a href="#Unsupervised">Unsupervised</a></li>
+  <li><a href="#ImageRestrictedNo">Image-Restricted, No Outside Data</a></li>
+  <li><a href="#UnrestrictedNo">Unrestricted, No Outside Data</a></li>
+  <li><a href="#ImageRestrictedLF">Image-Restricted, Label-Free Outside Data</a></li>
+  <li><a href="#UnrestrictedLF">Unrestricted, Label-Free Outside Data</a></li>
+  <li><a href="#UnrestrictedLb">Unrestricted, Labeled Outside Data</a></li>
+  <li><a href="#Human">Human Performance</a></li>
+  </ul>
+</li>
+<li><a href="#GeneratingROC">Generating ROC Curves</a></li>
+<li><a href="#ComputingAUC">Computing Area Under Curve (AUC)</a></li>
+<li><a href="#Methods">List of All Methods</a></li>
+</ul>
+</div><br >
+
+<a name="Introduction"></a><h3>Introduction</h3><br />
+
+LFW provides information for supervised learning under two different
+training paradigms: image-restricted and unrestricted.  Under the
+image-restricted setting, only binary "matched" or "mismatched" labels
+are given, for pairs of images.  Under the unrestricted setting, the
+identity information of the person appearing in each image is also
+available, allowing one to potentially form additional image
+pairs.<br /><br />
+
+An algorithm designed for LFW can also choose to abstain from using
+this supervised information, or supplement this with additional,
+outside training data, which may be labeled (matched/mismatched
+labeling or identity labeling) or label-free.  Depending on these
+decisions, results on LFW will fall into one of the six categories
+listed at the top of this page.<br /><br />
+
+The use of training data outside of LFW can have a significant impact
+on recognition performance.  For instance, it was shown in Wolf et
+al.<sup><a href="#combined-bg">10</a></sup> that using LFW-a, the
+version of LFW aligned using a trained commercial alignment system,
+improved the accuracy of the early Nowak and Jurie
+method<sup><a href="#nowak">2</a></sup> from 0.7393 on the
+funneled images to 0.7912, despite the fact that this method was
+designed to handle some misalignment.<br /><br />
+
+To enable the fair comparison of different algorithms on LFW, we ask
+that researchers be specific about what type of outside training data
+was used in the experiments.  The list of methods at the bottom of
+this page will also provide rough details on outside training data
+used by each method, with label-free outside training data being
+indicated with a <span style="color: red;">&dagger;</span>, and
+labeled outside training data being indicated with
+a <span style="color: red;">&Dagger;</span>.<br /><br />
+
+<!--
+We have also roughly separated the results into three
+categories.<br /><br />
+
+The first class of results strictly use only the training data
+provided in LFW.  The second class of results make implicit use of
+outside training data through trained facial feature detectors that
+are used to either align the images as in LFW-a or to determine where
+to extract features from in the image.  The third class of results
+make explicit use of outside training data in the recognition system
+itself, beyond the alignment/feature extraction stage as in the second
+class.<br /><br />
+
+Notes on the type of outside training data used for specific systems
+can be found in the list of methods at the bottom of the page.
+
+Details regarding training data falling under the second class are
+marked by sections beginning with a <span style="color:
+red;">&dagger;</span>, and under the third class are marked by
+sections beginning with a <span style="color:
+red;">&Dagger;</span>.<br /><br />
+-->
+
+For more information, see the below techical report and the
+LFW <a href="http://vis-www.cs.umass.edu/lfw/README.txt">readme</a>.<br /><br />
+
+Gary B. Huang and Erik Learned-Miller.<br />
+<a href="lfw_update.pdf"><b>Labeled Faces in the Wild: Updates and New Reporting Procedures</b></a>.<br />
+<i>UMass Amherst Technical Report UM-CS-2014-003</i>, 5 pages, 2014.<br /><br />
+
+<!--
+Often, algorithms designed for LFW will also make use of additional,
+external sources of training information.  For instance, this issue
+originally arose when facial landmark detectors were being used to
+align the images (Huang et al.<a href="#merl"><sup>4</sup></a>).
+These detectors were pre-trained on face part images outside of LFW,
+so this algorithm was implicitly making use of this additional source
+of information.  As these outside sources of training data can have a
+large impact on recognition accuracy, the use of such data must be
+considered when comparing algorithm performance.  Therefore, we have
+roughly divided the image-restricted results into several classes
+based on the amount of use of outside training data.  There are also
+<a href="#notesoutside">additional notes on this issue</a>.<br /><br />
+-->
+
+<hr /><br />
+
+<h3>LFW Results by Category</h3><br />
+
+<a name="notes"></a>Results in <span style="color: red;">red</span>
+indicate methods accepted but not yet published (e.g. accepted to an
+upcoming conference).  Results in <span style="color:
+green;">green</span> indicate commercial recognition systems whose
+algorithms have not been published and peer-reviewed.  We emphasize
+that researchers should not be compelled to compare against either of
+these types of results.<br /><br />
+
+<!--
+<h3>Notes</h3><br />
+
+<b>(u)</b> indicates ROC curve is for the unrestricted setting.<br /><br />
+
+<a name="notesoutside"></a><i>On the use of outside training data:</i><br /><br />
+-->
+
+<a name="Unsupervised"></a><h3>Unsupervised Results</h3>
+<br />
+
+Note: While most categories of results list the mean classification
+accuracy in the rightmost column, the unsupervised results category
+gives the Area Under the ROC Curve (AUC). The reason for this is that
+there is no legitimate way to choose a threshold for the unsupervised
+results without using labels or label distributions.<br /><br />
+
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td> </td>
+  <td width="25%">AUC</td>
+</tr>
+<tr>
+  <td>SD-MATCHES, 125x125<sup><a href="#study">12</a></sup>, funneled</td>
+  <td>0.5407</td>
+</tr>
+<tr>
+  <td>H-XS-40, 81x150<sup><a href="#study">12</a></sup>, funneled</td>
+  <td>0.7547</td>
+</tr>
+<tr>
+  <td>GJD-BC-100, 122x225<sup><a href="#study">12</a></sup>, funneled</td>
+  <td>0.7392</td>
+</tr>
+<tr>
+  <td>LARK unsupervised<sup><a href="#lark">20</a></sup>, aligned</td>
+  <td>0.7830</td>
+</tr>
+<tr>
+  <td>LHS<sup><a href="#lhs">29</a></sup>, aligned</td>
+  <td>0.8107</td>
+</tr>
+<tr>
+  <td>I-LPQ<sup>*</sup><sup><a href="#lpq">24</a></sup>, aligned</td>
+  <td>forthcoming</td>
+</tr>
+<tr>
+  <td>Pose Adaptive Filter (PAF)<sup><a href="#paf">31</a></sup></td>
+  <td>0.9405</td>
+</tr>
+<tr>
+  <td>MRF-MLBP<sup><a href="#emrfs">30</a></sup></td>
+  <td>0.8994</td>
+</tr>
+<tr>
+  <td>MRF-Fusion-CSKDA<sup><a href="#mrf-cskda">50</a></sup></td>
+  <td>0.9894</td>
+</tr>
+<tr>
+  <td>Spartans<sup><a href="#spartans">68</a></sup></td>
+  <td>0.9428</td>
+</tr>
+<tr>
+  <td>LBPNet<sup><a href="#lbpnet">79</a></sup></td>
+  <td>0.9404</td>
+</tr>
+<tr>
+  <td>SA-BSIF, WPCA, aligned<sup><a href="#SA-BSIF">85</a></sup></td>
+  <td>0.9318</td>
+</tr>
+<tr>
+  <td>PLWT<sup><a href="#plwt">112</a></sup></td>
+  <td>0.9608</td>
+</tr>
+<tr>
+  <td>PCLWT<sup><a href="#plwt">112</a></sup></td>
+  <td>0.9688</td>
+</tr>
+<tr>
+  <td>MS-LZM<sup><a href="#mslzm">116</a></sup></td>
+  <td>0.9515</td>
+</tr>
+</table>
+Table 1: Area Under ROC Curve (AUC).
+
+<!--
+<br /><br />
+<span style="color: red;">old table:</span>
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td> </td>
+  <td width="25%">&#251; &plusmn; S<sub>E</sub></td>
+</tr>
+<tr>
+  <td>SD-MATCHES, 125x125<sup><a href="#study">12</a></sup>, funneled</td>
+  <td>0.6410 &plusmn; 0.0062</td>
+</tr>
+<tr>
+  <td>H-XS-40, 81x150<sup><a href="#study">12</a></sup>, funneled</td>
+  <td>0.6945 &plusmn; 0.0048</td>
+</tr>
+<tr>
+  <td>GJD-BC-100, 122x225<sup><a href="#study">12</a></sup>, funneled</td>
+  <td>0.6847 &plusmn; 0.0065</td>
+</tr>
+<tr>
+  <td>LARK unsupervised<sup><a href="#lark">20</a></sup>, aligned</td>
+  <td>0.7223 &plusmn; 0.0049</td>
+</tr>
+<tr>
+  <td>LHS<sup><a href="#lhs">29</a></sup>, aligned</td>
+  <td>0.7340 &plusmn; 0.0040</td>
+</tr>
+<tr>
+  <td>I-LPQ<sup>*</sup><sup><a href="#lpq">24</a></sup>, aligned</td>
+  <td>0.8620 &plusmn; 0.0046</td>
+</tr>
+<tr>
+  <td>Pose Adaptive Filter (PAF)<sup><a href="#paf">31</a></sup></td>
+  <td>0.8777 &plusmn; 0.0051</td>
+</tr>
+<tr>
+  <td>MRF-MLBP<sup><a href="#emrfs">30</a></sup></td>
+  <td>0.8008 &plusmn; 0.0013</td>
+</tr>
+<tr>
+  <td>VMRS<sup><a href="#VMRS">36</a></sup></td>
+  <td>0.8857 &plusmn; 0.0037</td>
+</tr>
+</table>
+-->
+</div>
+
+<div style="text-align: center;"><img src="lfw_unsupervised.png" alt="lfw unsupervised roc curve" />
+<br />Figure 1: ROC curves averaged over 10 folds of View 2.</div><br /><br />
+
+
+<a name="ImageRestrictedNo"></a><h3>Image-Restricted, No Outside Data Results</h3>
+<br />
+
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td> </td>
+  <td width="25%">&#251; &plusmn; S<sub>E</sub></td>
+</tr>
+<tr>
+  <td>Eigenfaces<sup><a href="#eigenfaces">1</a></sup>, original</td>
+  <td>0.6002 &plusmn; 0.0079</td>
+</tr>
+<tr>
+  <td>Nowak<sup><a href="#nowak">2</a></sup>, original</td>
+  <td>0.7245 &plusmn; 0.0040</td>
+</tr>
+<tr>
+  <td>Nowak<sup><a href="#nowak">2</a></sup>, funneled<sup><a href="#funneled">3</a></sup></td>
+  <td>0.7393 &plusmn; 0.0049</td>
+</tr>
+<tr>
+  <td>Hybrid descriptor-based<sup><a href="#hybrid">5</a></sup>, funneled</td>
+  <td>0.7847 &plusmn; 0.0051</td>
+</tr>
+<tr>
+  <td>3x3 Multi-Region Histograms (1024)<sup><a href="#mrh">6</a></sup></td>
+  <td>0.7295 &plusmn; 0.0055</td>
+</tr>
+<tr>
+  <td>Pixels/MKL, funneled<sup><a href="#pinto">7</a></sup></td>
+  <td>0.6822 &plusmn; 0.0041</td>
+</tr>
+<tr>
+  <td>V1-like/MKL, funneled<sup><a href="#pinto">7</a></sup></td>
+  <td>0.7935 &plusmn; 0.0055</td>
+</tr>
+<tr>
+  <td>APEM (fusion), funneled<sup><a href="#apem">25</a></sup></td>
+  <td>0.8408 &plusmn; 0.0120</td>
+</tr>
+<tr>
+  <td>MRF-MLBP<sup><a href="#emrfs">30</a></sup></td>
+  <td>0.7908 &plusmn; 0.0014</td>
+</tr>
+<tr>
+  <td>Fisher vector faces<sup><a href="#fisher">32</a></sup></td>
+  <td>0.8747 &plusmn; 0.0149</td>
+</tr>
+<tr>
+  <td>Eigen-PEP<sup><a href="#eigenpep">49</a></sup></td>
+  <td>0.8897 &plusmn; 0.0132</td>
+</tr>
+<tr>
+  <td>MRF-Fusion-CSKDA<sup><a href="#mrf-cskda">50</a></sup></td>
+  <td>0.9589 &plusmn; 0.0194</td>
+</tr>
+<tr>
+  <td>POP-PEP<sup><a href="#pop-pep">58</a></sup></td>
+  <td>0.9110 &plusmn; 0.0147</td>
+</tr>
+<tr>
+  <td>Spartans<sup><a href="#spartans">68</a></sup></td>
+  <td>0.8755 &plusmn; 0.0021</td>
+</tr>
+<tr>
+  <td>RSF<sup><a href="#RSF">86</a></sup></td>
+  <td>0.8881 &plusmn; 0.0078</td>
+</tr>
+</table>
+Table 2: Mean classification accuracy &#251; and standard error of the mean S<sub>E</sub>.
+</div>
+
+<div style="text-align: center;"><img src="lfw_restricted_strict.png" alt="lfw restricted strict roc curve" />
+<br />Figure 2: ROC curves averaged over 10 folds of View 2.</div><br /><br />
+
+
+<a name="UnrestrictedNo"></a><h3>Unrestricted, No Outside Data Results</h3>
+<br />
+
+Currently no results in this category.<br />
+<!--
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td> </td>
+  <td width="25%">&#251; &plusmn; S<sub>E</sub></td>
+</tr>
+</table>
+Table 4: Mean classification accuracy &#251; and standard error of the mean S<sub>E</sub>.
+</div>
+-->
+<br /><br />
+
+
+<a name="ImageRestrictedLF"></a><h3>Image-Restricted, Label-Free Outside Data Results</h3>
+<br />
+
+<!--<a href="#notes"><span style="color: green;">(commercial system, see note at top)</span></a>-->
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td><a href="#notes"><span style="color: green;">MERL</span></a><sup><a href="#merl">4</a></sup></td>
+  <td width="25%">0.7052 &plusmn; 0.0060</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">MERL+Nowak</span></a><sup><a href="#merl">4</a></sup>, funneled</td>
+  <td>0.7618 &plusmn; 0.0058</td>
+</tr>
+<tr>
+  <td>LDML, funneled<sup><a href="#guillaumin">8</a></sup></td>
+  <td>0.7927 &plusmn; 0.0060</td>
+</tr>
+<tr>
+  <td>Hybrid, aligned<sup><a href="#multishot">9</a></sup></td>
+  <td>0.8398 &plusmn; 0.0035</td>
+</tr>
+<tr>
+  <td>Combined b/g samples based methods, aligned<sup><a href="#combined-bg">10</a></sup></td>
+  <td>0.8683 &plusmn; 0.0034</td>
+</tr>
+<tr>
+  <td>NReLU<sup><a href="#relu">13</a></sup></td>
+  <td>0.8073 &plusmn; 0.0134</td>
+</tr>
+<tr>
+  <td>Single LE + holistic<sup><a href="#ledesc">14</a></sup></td>
+  <td>0.8122 &plusmn; 0.0053</td>
+</tr>
+<tr>
+  <td>LBP + CSML, aligned<sup><a href="#csml">15</a></sup></td>
+  <td>0.8557 &plusmn; 0.0052</td>
+</tr>
+<tr>
+  <td>CSML + SVM, aligned<sup><a href="#csml">15</a></sup></td>
+  <td>0.8800 &plusmn; 0.0037</td>
+</tr>
+<tr>
+  <td>High-Throughput Brain-Inspired Features, aligned<sup><a href="#brain">16</a></sup></td>
+  <td>0.8813 &plusmn; 0.0058</td>
+</tr>
+<tr>
+  <td>LARK supervised<sup><a href="#lark">20</a></sup>, aligned</td>
+  <td>0.8510 &plusmn; 0.0059</td>
+</tr>
+<tr>
+  <td>DML-eig SIFT<sup><a href="#dml-eig">21</a></sup>, funneled</td>
+  <td>0.8127 &plusmn; 0.0230</td>
+</tr>
+<tr>
+  <td>DML-eig combined<sup><a href="#dml-eig">21</a></sup>, funneled &amp; aligned</td>
+  <td>0.8565 &plusmn; 0.0056</td>
+</tr>
+<tr>
+  <td>Convolutional DBN<sup><a href="#cdbn">37</a></sup></td>
+  <td>0.8777 &plusmn; 0.0062</td>
+</tr>
+<tr>
+  <td>SFRD+PMML<sup><a href="#sfrd">28</a></sup></td>
+  <td>0.8935 &plusmn; 0.0050</td>
+</tr>
+<tr>
+  <td>Pose Adaptive Filter (PAF)<sup><a href="#paf">31</a></sup></td>
+  <td>0.8777 &plusmn; 0.0051</td>
+</tr>
+<tr>
+  <td>Sub-SML<sup><a href="#sub-sml">35</a></sup></td>
+  <td>0.8973 &plusmn; 0.0038</td>
+</tr>
+<tr>
+  <td>VMRS<sup><a href="#VMRS">36</a></sup></td>
+  <td>0.9110 &plusmn; 0.0059</td>
+</tr>
+<tr>
+  <td>DDML<sup><a href="#ddml">43</a></sup></td>
+  <td>0.9068 &plusmn; 0.0141</td>
+</tr>
+<tr>
+  <td>LM3L<sup><a href="#lm3l">51</a></sup></td>
+  <td>0.8957 &plusmn; 0.0153</td>
+</tr>
+<tr>
+  <td>Hybrid on LFW3D<sup><a href="#frontalized">52</a></sup></td>
+  <td>0.8563 &plusmn; 0.0053</td>
+</tr>
+<tr>
+  <td>Sub-SML + Hybrid on LFW3D<sup><a href="#frontalized">52</a></sup></td>
+  <td>0.9165 &plusmn; 0.0104</td>
+</tr>
+<tr>
+  <td>HPEN + HD-LBP + DDML<sup><a href="#hpen">61</a></sup></td>
+  <td>0.9257 &plusmn; 0.0036</td>
+</tr>
+<tr>
+  <td>HPEN + HD-Gabor + DDML<sup><a href="#hpen">61</a></sup></td>
+  <td>0.9280 &plusmn; 0.0047</td>
+</tr>
+<tr>
+  <td>Spartans<sup><a href="#spartans">68</a></sup></td>
+  <td>0.8969 &plusmn; 0.0036</td>
+</tr>
+<tr>
+  <td>MSBSIF-SIEDA<sup><a href="#sieda">69</a></sup></td>
+  <td>0.9463 &plusmn; 0.0095</td>
+</tr>
+<tr>
+  <td>TSML with OCLBP<sup><a href="#triangular">73</a></sup></td>
+  <td>0.8710 &plusmn; 0.0043</td>
+</tr>
+<tr>
+  <td>TSML with feature fusion<sup><a href="#triangular">73</a></sup></td>
+  <td>0.8980 &plusmn; 0.0047</td>
+</tr>
+</table>
+Table 4: Mean classification accuracy &#251; and standard error of the mean S<sub>E</sub>.
+</div>
+
+<div style="text-align: center;"><img src="lfw_restricted_labelfree.png" alt="lfw restricted label-free roc curve" />
+<br />Figure 4: ROC curves averaged over 10 folds of View 2.</div><br /><br />
+
+
+<a name="UnrestrictedLF"></a><h3>Unrestricted, Label-Free Outside Data Results</h3>
+<br />
+
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td> </td>
+  <td width="25%">&#251; &plusmn; S<sub>E</sub></td>
+</tr>
+<tr>
+  <td>LDML-MkNN, funneled<sup><a href="#guillaumin">8</a></sup></td>
+  <td>0.8750 &plusmn; 0.0040</td>
+</tr>
+<tr>
+  <td>Combined multishot, aligned<sup><a href="#multishot">9</a></sup></td>
+  <td>0.8950 &plusmn; 0.0051</td>
+</tr>
+<tr>
+  <td>LBP multishot, aligned<sup><a href="#multishot">9</a></sup></td>
+  <td>0.8517 &plusmn; 0.0061</td>
+</tr>
+<tr>
+  <td>Attribute classifiers<sup><a href="#attsim">11</a></sup></td>
+  <td width="25%">0.8525 &plusmn; 0.0060</td>
+</tr>
+<tr>
+  <td>LBP PLDA, aligned<sup><a href="#plda">17</a></sup></td>
+  <td>0.8733 &plusmn; 0.0055</td>
+</tr>
+<tr>
+  <td>combined PLDA, funneled &amp; aligned<sup><a href="#plda">17</a></sup></td>
+  <td>0.9007 &plusmn; 0.0051</td>
+</tr>
+<tr>
+  <td>combined Joint Bayesian<sup><a href="#cjb">26</a></sup></td>
+  <td>0.9090 &plusmn; 0.0148</td>
+</tr>
+<tr>
+  <td>high-dim LBP<sup><a href="#hdlbp">27</a></sup></td>
+  <td>0.9318 &plusmn; 0.0107</td>
+</tr>
+<tr>
+  <td>Fisher vector faces<sup><a href="#fisher">32</a></sup></td>
+  <td>0.9303 &plusmn; 0.0105</td>
+</tr>
+<tr>
+  <td>Sub-SML<sup><a href="#sub-sml">35</a></sup></td>
+  <td>0.9075 &plusmn; 0.0064</td>
+</tr>
+<tr>
+  <td>VMRS<sup><a href="#VMRS">36</a></sup></td>
+  <td>0.9205 &plusmn; 0.0045</td>
+</tr>
+<tr>
+  <td>ConvNet-RBM<sup><a href="#convnet-rbm">42</a></sup></td>
+  <td>0.9175 &plusmn; 0.0048</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">CMD</span></a>, aligned<sup><a href="#cmd_slbp">22</a></sup></td>
+  <td>0.9170 &plusmn; 0.0110</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">SLBP</span></a>, aligned<sup><a href="#cmd_slbp">22</a></sup></td>
+  <td>0.9000 &plusmn; 0.0133</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">CMD+SLBP</span></a>, aligned<sup><a href="#cmd_slbp">22</a></sup></td>
+  <td>0.9258 &plusmn; 0.0136</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">VisionLabs ver. 1.0</span></a>, aligned<sup><a href="#visionlabs">38</a></sup></td>
+  <td>0.9290 &plusmn; 0.0031</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Aurora</span></a>, aligned<sup><a href="#aurora">39</a></sup></td>
+  <td>0.9324 &plusmn; 0.0044</td>
+</tr>
+<tr>
+  <td>MLBPH+MLPQH+MBSIFH<sup><a href="#mbsifh">54</a></sup></td>
+  <td>0.9303 &plusmn; 0.0082</td>
+</tr>
+<tr>
+  <td>HPEN + HD-LBP + JB<sup><a href="#hpen">61</a></sup></td>
+  <td>0.9487 &plusmn; 0.0038</td>
+</tr>
+<tr>
+  <td>HPEN + HD-Gabor + JB<sup><a href="#hpen">61</a></sup></td>
+  <td>0.9525 &plusmn; 0.0036</td>
+</tr>
+<tr>
+  <td>MDML-DCPs<sup><a href="#mdml_dcp">66</a></sup></td>
+  <td>0.9558 &plusmn; 0.0034</td>
+</tr>
+</table>
+Table 5: Mean classification accuracy &#251; and standard error of the mean S<sub>E</sub>.
+</div>
+
+<div style="text-align: center;"><img src="lfw_unrestricted_labelfree.png" alt="lfw unrestricted label-free roc curve" />
+<br />Figure 5: ROC curves averaged over 10 folds of View 2.</div><br /><br />
+
+
+<a name="UnrestrictedLb"></a><h3>Unrestricted, Labeled Outside Data Results</h3>
+<br />
+
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+
+<!-- conference paper results
+<tr>
+  <td>Attribute classifiers<sup><a href="#attsim">11</a></sup></td>
+  <td width="25%">0.8362 &plusmn; 0.0158</td>
+</tr>
+<tr>
+  <td>Simile classifiers<sup><a href="#attsim">11</a></sup></td>
+  <td>0.8414 &plusmn; 0.0131</td>
+</tr>
+<tr>
+  <td>Attribute and Simile classifiers<sup><a href="#attsim">11</a></sup></td>
+  <td>0.8529 &plusmn; 0.0123</td>
+</tr>
+-->
+
+<tr>
+  <td>Simile classifiers<sup><a href="#attsim">11</a></sup></td>
+  <td>0.8472 &plusmn; 0.0041</td>
+</tr>
+<tr>
+  <td>Attribute and Simile classifiers<sup><a href="#attsim">11</a></sup></td>
+  <td>0.8554 &plusmn; 0.0035</td>
+</tr>
+<tr>
+  <td>Multiple LE + comp<sup><a href="#ledesc">14</a></sup></td>
+  <td>0.8445 &plusmn; 0.0046</td>
+</tr>
+<tr>
+  <td>Associate-Predict<sup><a href="#associatepredict">18</a></sup></td>
+  <td>0.9057 &plusmn; 0.0056</td>
+</tr>
+<tr>
+  <td>Tom-vs-Pete<sup><a href="#his_her">23</a></sup></td>
+  <td>0.9310 &plusmn; 0.0135</td>
+</tr>
+<tr>
+  <td>Tom-vs-Pete + Attribute<sup><a href="#his_her">23</a></sup></td>
+  <td>0.9330 &plusmn; 0.0128</td>
+</tr>
+<tr>
+  <td>combined Joint Bayesian<sup><a href="#cjb">26</a></sup></td>
+  <td>0.9242 &plusmn; 0.0108</td>
+</tr>
+<tr>
+  <td>high-dim LBP<sup><a href="#hdlbp">27</a></sup></td>
+  <td>0.9517 &plusmn; 0.0113</td>
+</tr>
+<tr>
+  <td>DFD<sup><a href="#dfd">33</a></sup></td>
+  <td>0.8402 &plusmn; 0.0044</td>
+</tr>
+<tr>
+  <td>TL Joint Bayesian<sup><a href="#tl_joint_bayesian">34</a></sup></td>
+  <td>0.9633 &plusmn; 0.0108</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">face.com r2011b</span></a><sup><a href="#facecomr2011b">19</a></sup></td>
+  <td width="25%">0.9130 &plusmn; 0.0030</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Face++</span></a><sup><a href="#facepp">40</sup></td>
+  <!--<td>0.9727 &plusmn; 0.0065</td>-->
+  <td>0.9950 &plusmn; 0.0036</td>
+</tr>
+<tr>
+  <td>DeepFace-ensemble<sup><a href="#deepface">41</sup></td>
+  <td>0.9735 &plusmn; 0.0025</td>
+</tr>
+<tr>
+  <td>ConvNet-RBM<sup><a href="#convnet-rbm">42</a></sup></td>
+  <td>0.9252 &plusmn; 0.0038</td>
+</tr>
+<tr>
+  <td>POOF-gradhist<sup><a href="#poof">44</a></sup></td>
+  <td>0.9313 &plusmn; 0.0040</td>
+</tr>
+<tr>
+  <td>POOF-HOG<sup><a href="#poof">44</a></sup></td>
+  <td>0.9280 &plusmn; 0.0047</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">FR+FCN</span></a><sup><a href="#canonical">45</sup></td>
+  <td>0.9645 &plusmn; 0.0025</td>
+</tr>
+<tr>
+  <td>DeepID<sup><a href="#deepid">46</a></sup></td>
+  <td>0.9745 &plusmn; 0.0026</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">GaussianFace</span></a><sup><a href="#gaussianface">47</sup></td>
+  <td>0.9852 &plusmn; 0.0066</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">DeepID2</span></a><sup><a href="#deepid2">48</sup></td>
+  <td>0.9915 &plusmn; 0.0013</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">TCIT</span></a><sup><a href="#tcit">53</sup></td>
+  <td>0.9333 &plusmn; 0.0124</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">DeepID2+</span></a><sup><a href="#deepid2+">55</sup></td>
+  <td>0.9947 &plusmn; 0.0012</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">betaface.com</span></a><sup><a href="#betaface">56</sup></td>
+<!--  <td>0.9428 &plusmn; 0.0044</td> -->
+<!--  <td>0.9808 &plusmn; 0.0016</td> -->
+<td>0.9953 &plusmn; 0.0009</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">DeepID3</span></a><sup><a href="#deepid3">57</sup></td>
+  <td>0.9953 &plusmn; 0.0010</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">insky.so</span></a><sup><a href="#insky">59</sup></td>
+  <td>0.9551 &plusmn; 0.0013</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Uni-Ubi</span></a><sup><a href="#uni-ubi">60</sup></td>
+  <td>0.9900 &plusmn; 0.0032</td>
+</tr>
+<tr>
+  <td>FaceNet<sup><a href="#facenet">62</sup></td>
+  <td>0.9963 &plusmn; 0.0009</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Baidu</span></a><sup><a href="#baidu">64</sup></td>
+  <td>0.9977 &plusmn; 0.0006</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">AuthenMetric</span></a><sup><a href="#authenmetric">65</sup></td>
+  <td>0.9977 &plusmn; 0.0009</td>
+</tr>
+<tr>
+  <td>MMDFR<sup><a href="#mmdfr">67</sup></td>
+  <td>0.9902 &plusmn; 0.0019</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">CW-DNA-1</span></a><sup><a href="#cloudwalk">70</sup></td>
+  <td>0.9950 &plusmn; 0.0022</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Faceall</span></a><sup><a href="#faceall">71</sup></td>
+  <td>0.9967 &plusmn; 0.0007</td>
+  <!--<td>0.9940 &plusmn; 0.0010</td>-->
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">JustMeTalk</span></a><sup><a href="#justmetalk">72</sup></td>
+  <td>0.9887 &plusmn; 0.0016</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Facevisa</span></a><sup><a href="#facevisa">74</sup></td>
+  <td>0.9955 &plusmn; 0.0014<!--0.9917 &plusmn; 0.0019--></td>
+</tr>
+<tr>
+  <td>pose+shape+expression augmentation<sup><a href="#pse">75</sup></td>
+  <td>0.9807 &plusmn; 0.0060</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">ColorReco</span></a><sup><a href="#colorreco">76</sup></td>
+  <td>0.9940 &plusmn; 0.0022</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Asaphus</span></a><sup><a href="#asaphus">77</sup></td>
+  <td>0.9815 &plusmn; 0.0039</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Daream</span></a><sup><a href="#daream">78</sup></td>
+  <td>0.9968 &plusmn; 0.0009</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Dahua-FaceImage</span></a><sup><a href="#dahua">80</sup></td>
+  <td>0.9978 &plusmn; 0.0007</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Skytop Gaia</span></a><sup><a href="#gskytop">82</sup></td>
+  <td>0.9630 &plusmn; 0.0023</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">CNN-3DMM estimation</span></a><sup><a href="#cnn-3dmm">83</sup></td>
+  <td>0.9235 &plusmn; 0.0129</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Samtech Facequest</span></a><sup><a href="#samtech">84</sup></td>
+  <td>0.9971 &plusmn; 0.0018</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">XYZ Robot</span></a><sup><a href="#xyz">87</sup></td>
+  <td>0.9895 &plusmn; 0.0020</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">THU CV-AI Lab</span></a><sup><a href="#thu">88</sup></td>
+  <td>0.9973 &plusmn; 0.0008</td>
+</tr>
+<tr>
+  <td>dlib<sup><a href="#dlib">90</sup></td>
+  <td>0.9938 &plusmn; 0.0027</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Aureus</span></a><sup><a href="#aureus">91</sup></td>
+  <td>0.9920 &plusmn; 0.0030</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">YouTu Lab, Tencent</span></a><sup><a href="#tencent">63</sup></td>
+  <td>0.9980 &plusmn; 0.0023</td>
+  <!--<td>0.9965 &plusmn; 0.0025</td>-->
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Orion Star</span></a><sup><a href="#orion">92</sup></td>
+  <td>0.9965 &plusmn; 0.0032</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Yuntu WiseSight</span></a><sup><a href="#yuntu">93</sup></td>
+  <td>0.9943 &plusmn; 0.0045</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">PingAn AI Lab</span></a><sup><a href="#pingan">89</sup></td>
+  <td>0.9980 &plusmn; 0.0016</td>
+  <!--<td>0.9960 &plusmn; 0.0031</td>-->
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Turing123</span></a><sup><a href="#turing">94</sup></td>
+  <td>0.9940 &plusmn; 0.0040</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Hisign</span></a><sup><a href="#hisign">95</sup></td>
+  <td>0.9968 &plusmn; 0.0030</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">VisionLabs V2.0</span></a><sup><a href="#visionlabs">38</a></sup></td>
+  <td>0.9978 &plusmn; 0.0007</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Deepmark</span></a><sup><a href="#deepmark">96</sup></td>
+  <td>0.9923 &plusmn; 0.0016</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Force Infosystems</span></a><sup><a href="#force">97</sup></td>
+  <td>0.9973 &plusmn; 0.0028</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">ReadSense</span></a><sup><a href="#readsense">98</sup></td>
+  <td>0.9982 &plusmn; 0.0007</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">CM-CV&amp;AR</span></a><sup><a href="#cmcvar">99</sup></td>
+  <td>0.9983 &plusmn; 0.0024</td>
+  <!-- <td>0.9963 &plusmn; 0.0039</td> -->
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">sensingtech</span></a><sup><a href="#sensingtech">100</sup></td>
+  <td>0.9970 &plusmn; 0.0008</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Glasssix</span></a><sup><a href="#glasssix">101</sup></td>
+  <td>0.9983 &plusmn; 0.0018</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">icarevision</span></a><sup><a href="#icarevision">102</sup></td>
+  <td>0.9977 &plusmn; 0.0030</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Easen Electron</span></a><sup><a href="#easen">81</sup></td>
+  <td>0.9983 &plusmn; 0.0006</td>
+  <!--<td>0.9978 &plusmn; 0.0006</td>-->
+  <!--<td>0.9968 &plusmn; 0.0009</td>-->
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">yunshitu</span></a><sup><a href="#yunshitu">103</sup></td>
+  <td>0.9987 &plusmn; 0.0012</td>
+  <!--<td>0.9975 &plusmn; 0.0006</td>-->
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">RemarkFace</span></a><sup><a href="#remarkface">104</sup></td>
+  <td>0.9972 &plusmn; 0.0020</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">IntelliVision</span></a><sup><a href="#intellivision">105</sup></td>
+  <td>0.9973 &plusmn; 0.0027</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">senscape</span></a><sup><a href="#senscape">106</sup></td>
+  <td>0.9930 &plusmn; 0.0053</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Meiya Pico</span></a><sup><a href="#meiyapico">107</sup></td>
+  <td>0.9972 &plusmn; 0.0008</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Faceter.io</span></a><sup><a href="#faceter">108</sup></td>
+  <td>0.9978 &plusmn; 0.0008</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Pegatron</span></a><sup><a href="#pegatron">109</sup></td>
+  <td>0.9958 &plusmn; 0.0013</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">CHTFace</span></a><sup><a href="#chtface">110</sup></td>
+  <td>0.9960 &plusmn; 0.0025</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">FRDC</span></a><sup><a href="#frdc">111</sup></td>
+  <td>0.9972 &plusmn; 0.0029</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">YI+AI</span></a><sup><a href="#yi_ai">113</sup></td>
+  <td>0.9983 &plusmn; 0.0024</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Aratek</span></a><sup><a href="#aratek">114</sup></td>
+  <td>0.9972 &plusmn; 0.0021</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Cylltech</span></a><sup><a href="#cylltech">115</sup></td>
+  <td>0.9982 &plusmn; 0.0023</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">TerminAI</span></a><sup><a href="#terminai">117</sup></td>
+  <td>0.9980 &plusmn; 0.0016</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">ever.ai</span></a><sup><a href="#everai">118</sup></td>
+  <td>0.9985 &plusmn; 0.0020</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Camvi</span></a><sup><a href="#camvi">119</sup></td>
+  <td>0.9987 &plusmn; 0.0018</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">IFLYTEK-CV</span></a><sup><a href="#iflytek">120</sup></td>
+  <td>0.9980 &plusmn; 0.0024</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">DRD, CTBC Bank</span></a><sup><a href="#ctbc">121</sup></td>
+  <td>0.9981 &plusmn; 0.0033</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Innovative Technology</span></a><sup><a href="#itl">122</sup></td>
+  <td>0.9988 &plusmn; 0.0004</td>
+</tr>
+<tr>
+  <td><a href="#notes"><span style="color: green;">Oz Forensics</span></a><sup><a href="#ozf">123</sup></td>
+  <td>0.9987 &plusmn; 0.0018</td>
+</tr>
+</table>
+Table 6: Mean classification accuracy &#251; and standard error of the mean S<sub>E</sub>.
+</div>
+
+<div style="text-align: center;"><img src="lfw_unrestricted_labeled.png" alt="lfw unrestricted labeled roc curve" name="lfw_unrestricted_labeled_img" onClick="mouseClick();" />
+<br />Figure 6: ROC curves averaged over 10 folds of View 2.<br />
+<span style="color: red; font-weight: bold;">[click image to toggle zoom]</span>
+</div><br /><br />
+
+
+<a name="Human"></a><h3>Human performance, measured through Amazon Mechanical Turk</h3>
+<br />
+
+See <a href="#note_human">note on human performance</a> below.<br /><br />
+
+<div style="text-align: center;">
+<table border="1px" style="border-collapse: collapse; margin-left: 15%; margin-right: 15%; width: 80%;">
+<tr>
+  <td>Human, funneled<sup><a href="#attsim">11</a></sup></td>
+  <td width="25%">0.9920</td>
+</tr>
+<tr>
+  <td>Human, cropped<sup><a href="#attsim">11</a></sup></td>
+  <td>0.9753</td>
+</tr>
+<tr>
+  <td>Human, inverse mask<sup><a href="#attsim">11</a></sup></td>
+  <td>0.9427</td>
+</tr>
+</table>
+Table 7: Mean classification accuracy &#251; and standard error of the mean S<sub>E</sub>.
+</div>
+
+<div style="text-align: center;"><img src="lfw_human.png" alt="lfw human roc curve" />
+<br />Figure 7: ROC curves averaged over 10 folds of View 2.</div><br /><br />
+
+<a name="note_human"></a>Note on human performance:<br /><br />
+
+The experiments on human performance, as described by
+[<a href="#attsim">11</a>], did not control for whether subjects had
+prior exposure to the people pictured in the test sets. It is probable
+that the human subjects were familiar with the appearance of many of
+the identities in the test sets, since many of them are famous
+politicians, sports figures, and actors. This is tantamount to the
+human subjects having labeled training data for some subjects that
+were in the test sets, which is disallowed under all LFW protocols.
+That is, the human performance experiments do not conform to any of
+the protocols described in the <a href="lfw_update.pdf">update to LFW
+technical report</a>.<br /><br />
+
+While we believe that these results are interesting and worth
+reporting as a separate category, they may somewhat overestimate the
+accuracy of humans on this task when the identities of test images are
+not people whose appearance is already known.<br /><br />
+
+<hr /><br />
+
+<a name="GeneratingROC"></a><h3>Generating ROC Curves</h3><br />
+
+The following scripts were used to generate the above ROC curves using gnuplot:<br />
+<a href="plot_lfw_roc_unsupervised.p">plot_lfw_roc_unsupervised.p</a><br />
+<a href="plot_lfw_roc_restricted_strict.p">plot_lfw_roc_restricted_strict.p</a><br />
+<a href="plot_lfw_roc_restricted_labelfree.p">plot_lfw_roc_restricted_labelfree.p</a><br />
+<a href="plot_lfw_roc_unrestricted_labelfree.p">plot_lfw_roc_unrestricted_labelfree.p</a><br />
+<a href="plot_lfw_roc_unrestricted_labeled.p">plot_lfw_roc_unstricted_labeled.p</a><br />
+<a href="plot_lfw_roc_human.p">plot_lfw_roc_human.p</a><br />
+<br />
+
+The scripts take in one text file for each method, containing on each
+line a point on the ROC curve, i.e. average true positive rate,
+followed by average false positive rate, separated by a single space.
+Additional methods can be added to the script by adding on to the plot
+command, e.g.<br />
+
+<pre>
+plot "nowak-original-roc.txt" using 2:1 with lines title "Nowak, original", \
+     "nowak-funneled-roc.txt" using 2:1 with lines title "Nowak, funneled", \
+     "new-method-roc.txt" using 2:1 with lines title "New Method"
+</pre>
+
+Note that each point on the curve represents the average over the 10
+folds of (false positive rate, true positive rate) for a fixed
+threshold.<br /><br />
+
+Existing ROC files can be downloaded here:<br /><br />
+
+Unsupervised
+<ul>
+<li>H-XS-40 - <a href="roc-files/lbp_eurasip2009_jrs-roc.txt">lbp_eurasip2009_jrs-roc.txt</a></li>
+<li>GJD-BC-100 - <a href="roc-files/gabor_eurasip2009_jrs-roc.txt">gabor_eurasip2009_jrs-roc.txt</a></li>
+<li>SD-MATCHES - <a href="roc-files/sift_eurasip2009_jrs-roc.txt">sift_eurasip2009_jrs-roc.txt</a></li>
+<li>LARK - <a href="roc-files/Haejong_Milanfar_LARK_unsupervised.txt">Haejong_Milanfar_LARK_unsupervised.txt</a></li>
+<li>LHS - <a href="roc-files/lhs_roc_view2.txt">lhs_roc_view2.txt</a></li>
+<li>PAF - <a href="roc-files/paf_cvpr2013.txt">paf_cvpr2013.txt</a></li>
+<li>MRF-MLBP - <a href="roc-files/mrf_mlbp_roc.txt">mrf_mlbp_roc.txt</a></li>
+<li>Spartans - <a href="roc-files/Spartans_Unsupervised.txt">Spartans_Unsupervised.txt</a></li>
+<li>LBPNet - <a href="roc-files/lbpnet_roc_lfw_unsu.txt">lbpnet_roc_lfw_unsu.txt</a></li>
+<li>PLWT - <a href="roc-files/PLWT.txt">PLWT.txt</a></li>
+<li>PCLWT - <a href="roc-files/PCLWT.txt">PCLWT.txt</a></li>
+</ul><br />
+
+Image-Restricted, No Outside Data
+<ul>
+<li>Eigenfaces - <a href="roc-files/eigenfaces-original-roc.txt">eigenfaces-original-roc.txt</a></li>
+<li>Nowak, original - <a href="roc-files/nowak-original-roc.txt">nowak-original-roc.txt</a></li>
+<li>Nowak, funneled - <a href="roc-files/nowak-funneled-roc.txt">nowak-funneled-roc.txt</a></li>
+<li>Hybrid descriptor-based - <a href="roc-files/combined16.txt">combined16.txt</a></li>
+<li>Pixels/MKL - <a href="roc-files/funneled-pixels-roc.txt">funneled-v1-like-roc.txt</a></li>
+<li>V1-like/MKL - <a href="roc-files/funneled-v1-like-roc.txt">funneled-v1-like-roc.txt</a></li>
+<li>APEM (fusion) - <a href="roc-files/apem-funnel-roc.txt">apem-funnel-roc.txt</a></li>
+<li>Fisher vector faces - <a href="roc-files/fisher-vector-faces-restricted.txt">fisher-vector-faces-restricted.txt</a></li>
+<li>Eigen-PEP - <a href="roc-files/ROC-LFW-EigenPEP.txt">ROC-LFW-EigenPEP.txt</a></li>
+<li>POP-PEP - <a href="roc-files/POP-PEP.txt">POP-PEP.txt</a></li>
+<li>Spartans - <a href="roc-files/Spartans_Image_Restricted_No_Outside_Data.txt">Spartans_Image_Restricted_No_Outside_Data.txt</a></li>
+</ul><br />
+
+Image-Restricted, Label-Free Outside Data
+<ul>
+<li>MERL - <a href="roc-files/merl-roc.txt">merl-roc.txt</a></li>
+<li>MERL+Nowak - <a href="roc-files/combined-roc.txt">combined-roc.txt</a></li>
+<li>LDML - <a href="roc-files/guillaumin-ldml.txt">guillaumin-ldml.txt</a></li>
+<li>Hybrid - <a href="roc-files/hybrid_with_sift_aligned.txt">hybrid_with_sift_aligned.txt</a></li>
+<li>Combined b/g samples based methods - <a href="roc-files/accv09-wolf-hassner-taigman-roc.txt">accv09-wolf-hassner-taigman-roc.txt</a></li>
+<li>Single LE + holistic - <a href="roc-files/LE_bestsingle.txt">LE_bestsingle.txt</a></li>
+<li>LBP + CSML - <a href="roc-files/aligned_lbp_sqrt_csml_roc.txt">aligned_lbp_sqrt_csml_roc.txt</a></li>
+<li>CSML + SVM - <a href="roc-files/aligned_csml_svm_roc.txt">aligned_csml_svm_roc.txt</a></li>
+<li>High-Throughput Brain-Inspired Features - <a href="roc-files/pinto-cox-fg2011-roc.txt">pinto-cox-fg2011-roc.txt</a></li>
+<li>LARK supervised - <a href="roc-files/Haejong_Milanfar_LARK_supervised.txt">Haejong_Milanfar_LARK_supervised.txt</a></li>
+<li>DML-eig SIFT - <a href="roc-files/dml_eig_SIFT_restricted_jmlr.txt">dml_eig_SIFT_restricted_jmlr.txt</a></li>
+<li>DML-eig combined - <a href="roc-files/dml_eig_combined_restricted_jmlr.txt">dml_eig_combined_restricted_jmlr.txt</a></li>
+<li>SFRD+PMML - <a href="roc-files/LFW_ROC_SFRD+PMML.txt">LFW_ROC_SFRD+PMML.txt</a></li>
+<li>Pose Adaptive Filter (PAF) - <a href="roc-files/paf_cvpr2013.txt">paf_cvpr2013.txt</a></li>
+<li>Sub-SML - <a href="roc-files/sub-sml_iccv2013_combined_restricted.txt">sub-sml_iccv2013_combined_restricted.txt</a></li>
+<li>DDML - <a href="roc-files/ddml_combined_restricted.txt">ddml_combined_restricted.txt</a></li>
+<li>LM3L - <a href="roc-files/lm3l_restricted_lfw.txt">lm3l_restricted_lfw.txt</a></li>
+<li>Hybrid on LFW3D - <a href="roc-files/Hybrid_on_LFW3D.txt">Hybrid_on_LFW3D.txt</a></li>
+<li>Sub-SML + Hybrid on LFW3D - <a href="roc-files/Sub-SML_and_Hybrid_on_LFW3D.txt">Sub-SML_and_Hybrid_on_LFW3D.txt</a></li>
+<li>HPEN + HD-LBP + DDML - <a href="roc-files/score_lfw_restricted_HPEN_HDLBP_DDML.txt">score_lfw_restricted_HPEN_HDLBP_DDML.txt</a></li>
+<li>HPEN + HD-Gabor + DDML - <a href="roc-files/score_lfw_restricted_HPEN_HDGabor_DDML.txt">score_lfw_restricted_HPEN_HDGabor_DDML.txt</a></li>
+<li>Spartans - <a href="roc-files/Spartans_Image_Restricted_Label_Free_Outside_Data.txt">Spartans_Image_Restricted_Label_Free_Outside_Data.txt</a></li>
+<li>MSBSIF SIEDA - <a href="roc-files/MSBSIF_SIEDA.txt">MSBSIF_SIEDA.txt</a></li>
+</ul><br />
+
+Unrestricted, Label-Free Outside Data
+<ul>
+<li>LDML-MkNN - <a href="roc-files/guillaumin-ldmlmknn.txt">guillaumin-ldmlmknn.txt</a></li>
+<li>Combined multishot - <a href="roc-files/multishot_unrestricted_bmvc09.txt">multishot_unrestricted_bmvc09.txt</a></li>
+<li>LBP multishot - <a href="roc-files/multishot_unrestricted_single_feature_bmvc09.txt">multishot_unrestricted_single_feature_bmvc09.txt</a></li>
+<li>Attribute classifiers - <a href="roc-files/kumar_attrs_pami2011.txt">kumar_attrs_pami2011.txt</a></li>
+<li>LBP PLDA - <a href="roc-files/plda_lbp_unrestricted_pami.txt">plda_lbp_unrestricted_pami.txt</a></li>
+<li>combined PLDA - <a href="roc-files/plda_combined_unrestricted_pami.txt">plda_combined_unrestricted_pami.txt</a></li>
+<li>combined Joint Bayesian - <a href="roc-files/joint_bayesian_combined_unrestricted_eccv12.txt">joint_bayesian_combined_unrestricted_eccv12.txt</a></li>
+<li>high-dim LBP - <a href="roc-files/high_dim_LBP_unrestricted_cvpr13.txt">high_dim_LBP_unrestricted_cvpr13.txt</a></li>
+<li>Fisher vector faces - <a href="roc-files/fisher-vector-faces-unrestricted.txt">fisher-vector-faces-unrestricted.txt</a></li>
+<li>Sub-SML - <a href="roc-files/sub-sml_iccv2013_combined_unrestricted.txt">sub-sml_iccv2013_combined_unrestricted.txt</a></li>
+<li>CMD - <a href="roc-files/ROC_CovarianceMatrix.txt">ROC_CovarianceMatrix.txt</a></li>
+<li>SLBP - <a href="roc-files/ROC_SLBP.txt">ROC_SLBP.txt</a></li>
+<li>ConvNet-RBM - <a href="roc-files/convnet-rbm_unrestrict_iccv13.txt">convnet-rbm_unrestrict_iccv13.txt</a></li>
+<li>CMD - <a href="roc-files/ROC_Combined.txt">ROC_Combined.txt</a></li>
+<li>VisionLabs ver. 1.0 - <a href="roc-files/visionlabs-unrestricted.txt">visionlabs-unrestricted.txt</a></li>
+<li>Aurora - <a href="roc-files/Aurora-c-2014-1--facerec.com.txt">Aurora-c-2014-1--facerec.com.txt</a></li>
+<li>HPEN + HD-LBP + JB - <a href="roc-files/score_lfw_unrestricted_HPEN_HDLBP_JB.txt">score_lfw_unrestricted_HPEN_HDLBP_JB.txt</a></li>
+<li>HPEN + HD-Gabor + JB - <a href="roc-files/score_lfw_unrestricted_HPEN_HDGabor_JB.txt">score_lfw_unrestricted_HPEN_HDGabor_JB.txt</a></li>
+<li>MDML-DCPs - <a href="roc-files/MDMLDCPs_ROC.txt">MDMLDCPs_ROC.txt</a></li>
+</ul><br />
+
+Unrestricted, Labeled Outside Data
+<ul>
+<li>Simile classifiers - <a href="roc-files/kumar_similes_pami2011.txt">kumar_similes_pami2011.txt</a></li>
+<li>Attribute and Simile classifiers - <a href="roc-files/kumar_attrs_sims_pami2011.txt">kumar_attrs_sims_pami2011.txt</a></li>
+<li>Multiple LE + comp - <a href="roc-files/LE_combine.txt">LE_combine.txt</a></li>
+<li>Associate-Predict - <a href="roc-files/associatepredict_cvpr11.txt">associatepredict_cvpr11.txt</a></li>
+<li>Tom-vs-Pete - <a href="roc-files/berg_belhumeur_bmvc12.txt">berg_belhumeur_bmvc12.txt</a></li>
+<li>Tom-vs-Pete + Attribute - <a href="roc-files/berg_belhumeur_attrs_bmvc12.txt">berg_belhumeur_attrs_bmvc12.txt</a></li>
+<li>combined Joint Bayesian - <a href="roc-files/joint_bayesian_combined_restricted_outside_eccv12.txt">joint_bayesian_combined_restricted_outside_eccv12.txt</a></li>
+<li>high-dim LBP - <a href="roc-files/high_dim_LBP_restricted_outside_cvpr13.txt">high_dim_LBP_restricted_outside_cvpr13.txt</a></li>
+<li>DFD - <a href="roc-files/DFD_unsupervised.txt">DFD_unsupervised.txt</a></li>
+<li>TL Joint Bayesian - <a href="roc-files/XudongCao_TransferLearning_FaceVerification_ICCV2013.txt">XudongCao_TransferLearning_FaceVerification_ICCV2013.txt</a></li>
+<li>face.com r2011b - <a href="roc-files/taigman_wolf_r2011b.txt">taigman_wolf_r2011b.txt</a></li>
+<li>Face++ - <a href="roc-files/faceplusplus_lfw_result.txt">faceplusplus_lfw_result.txt</a><!--<a href="roc-files/facepp3.0v5.txt">facepp3.0v5.txt</a>--></li>
+<li>DeepFace - <a href="roc-files/deepface_ensemble.txt">deepface_ensemble.txt</a></li>
+<li>ConvNet-RBM - <a href="roc-files/convnet-rbm_celebfaces_iccv13.txt">convnet-rbm_celebfaces_iccv13.txt</a></li>
+<li>POOF-gradhist - <a href="roc-files/berg_belhumeur_poofs_cvpr13_gradhist.txt">berg_belhumeur_poofs_cvpr13_gradhist.txt</a></li>
+<li>POOF-HOG - <a href="roc-files/berg_belhumeur_poofs_cvpr13_hog.txt">berg_belhumeur_poofs_cvpr13_hog.txt</a></li>
+<li>FR+FCN - <a href="roc-files/canonical_cnn_lholistic_outside.txt">canonical_cnn_lholistic_outside.txt</a></li>
+<li>DeepID - <a href="roc-files/YiSun_DeepID_CelebFaces+_TL_CVPR2014.txt">YiSun_DeepID_CelebFaces+_TL_CVPR2014.txt</a></li>
+<li>GaussianFace - <a href="roc-files/gaussianface.txt">gaussianface.txt</a></li>
+<li>DeepID2 - <a href="roc-files/YiSun_DeepID2.txt">YiSun_DeepID2.txt</a></li>
+<li>TCIT - <a href="roc-files/tcit_roc.txt">tcit_roc.txt</a></li>
+<li>DeepID2+ - <a href="roc-files/deepid2plus_arxiv1412.1265.txt">deepid2plus_arxiv1412.1265.txt</a></li>
+<!--<li>betaface.com - <a href="roc-files/DeepID_2015_gray_autoaligned.txt">DeepID_2015_gray_autoaligned.txt</a></li>-->
+<!--<li>betaface.com - <a href="roc-files/DeepID2_2015_gray_autoaligned.txt">DeepID2_2015_gray_autoaligned.txt</a></li>-->
+<li>betaface.com - <a href="roc-files/ROC2017_Betaface_SDK32_greyscale_noalign_DeepID3_512.txt">ROC2017_Betaface_SDK32_greyscale_noalign_DeepID3_512.txt</a></li>
+<li>DeepID3 - <a href="roc-files/DeepID3_arXiv_1502.00873.txt">DeepID3_arXiv_1502.00873.txt</a></li>
+<li>insky.so - <a href="roc-files/insky-roc.txt">insky-roc.txt</a></li>
+<li>Uni-Ubi - <a href="roc-files/roc_uni-ubi.txt">roc_uni-ubi.txt</a></li>
+<!--<li>Tencent-BestImage - <a href="roc-files/Tencent-BestImage_LFW_ROC.txt">Tencent-BestImage_LFW_ROC.txt</a></li>-->
+<li>Baidu - <a href="roc-files/BaiduIDLFinal.TPFP">BaiduIDLFinal.TPFP</a></li>
+<li>AuthenMetric - <a href="roc-files/authenmetric_lfw_roc_07-28-2015.txt">authenmetric_lfw_roc_07-28-2015.txt</a></li>
+<li>MM-DFR - <a href="roc-files/MMDFR_ROC.txt">MMDFR_ROC.txt</a></li>
+<li>CW-DNA-1 - <a href="roc-files/CW-DNA-1.txt">CW-DNA-1.txt</a></li>
+<li>Faceall - <a href="roc-files/FaceALL_V2_LFW_ROC.txt">FaceALL_V2_LFW_ROC.txt</a></li>
+<li>JustMeTalk - <a href="roc-files/justmetalk_roc_lfw.txt">justmetalk_roc_lfw.txt</a></li>
+<li>Facevisa - <a href="roc-files/facevisa2.txt">facevisa2.txt</a></li>
+<li>pose+shape+expression augmentation - <a href="roc-files/augmented_CNN_lfw.txt">augmented_CNN_lfw.txt</a></li>
+<li>ColorReco - <a href="roc-files/roc_colorreco.txt">roc_colorreco.txt</a></li>
+<li>Daream - <a href="roc-files/daream_lfw_roc.txt">daream_lfw_roc.txt</a></li>
+<li>Dahua-FaceImage - <a href="roc-files/dahua-faceimage_lfw_roc.txt">dahua-faceimage_lfw_roc.txt</a></li>
+<li>Easen Electron - <a href="roc-files/EasenElectron3_lfw_ROC.txt">EasenElectron3_lfw_ROC.txt</a></li>
+<li>Skytop Gaia - <a href="roc-files/gskytop_lfw_roc.txt">gskytop_lfw_roc.txt</a></li>
+<li>CNN-3DMM estimation - <a href="roc-files/3DMM_CNN_lfw.txt">3DMM_CNN_lfw.txt</a></li>
+<li>samtech facequest - <a href="roc-files/samtech_facequest_testROC_avg.txt">samtech_facequest_testROC_avg.txt</a></li>
+<li>XYZ Robot - <a href="roc-files/XYZ-Robot_LFW_ROC.txt">XYZ-Robot_LFW_ROC.txt</a></li>
+<li>THU CV-AI Lab - <a href="roc-files/thu_roc.txt">thu_roc.txt</a></li>
+<li>PingAn AI Lab - <a href="roc-files/PingAn_ai_tpr_fpr.txt">PingAn_ai_tpr_fpr.txt</a></li>
+<li>dlib - <a href="roc-files/dlib_LFW_roc_curve.txt">dlib_LFW_roc_curve.txt</a></li>
+<li>Aureus - <a href="roc-files/Aureus5.6_ROC.txt">Aureus5.6_ROC.txt</a></li>
+<li>YouTu Lab, Tencent - <a href="roc-files/tencent-bestimage-roc.txt">tencent-bestimage-roc.txt</a></li>
+<li>Yuntu WiseSight - <a href="roc-files/Yuntu_Tech_ROC.txt">Yuntu_Tech_ROC.txt</a></li>
+<li>Hisign Technology - <a href="roc-files/hisign_lfw_roc.txt">hisign_lfw_roc.txt</a></li>
+<li>VisionLabs V2.0 - <a href="roc-files/VL_LFW_ROC.txt">VL_LFW_ROC.txt</a></li>
+<li>Deepmark - <a href="roc-files/deepmark_roc.txt">deepmark_roc.txt</a></li>
+<li>Force Infosystems - <a href="roc-files/forceinfosystem_ROC_avg.txt">forceinfosystem_ROC_avg.txt</a></li>
+<li>ReadSense - <a href="roc-files/readsense-v1-roc.txt">readsense-v1-roc.txt</a></li>
+<li>CM-CV&amp;AR - <a href="roc-files/CV_AR_lfw_roc.txt">CV_AR_lfw_roc.txt</a></li>
+<li>sensingtech - <a href="roc-files/sensingtech_lfw_roc.txt">sensingtech_lfw_roc.txt</a></li>
+<li>Glasssix - <a href="roc-files/Glasssix_roc_result.txt">Glasssix_roc_result.txt</a></li>
+<li>icarevision - <a href="roc-files/icarevision_roc.txt">icarevision_roc.txt</a></li>
+<li>yunshitu - <a href="roc-files/yunshitu_face_r100_v8_lfw_roc.txt">yunshitu_face_r100_v8_lfw_roc.txt</a></li>
+<!--<li>yunshitu - <a href="roc-files/yunshitu_v1_lfw_roc.txt">yunshitu_v1_lfw_roc.txt</a></li>-->
+<li>IntelliVision - <a href="roc-files/intellivision_roc.txt">intellivision_roc.txt</a></li>
+<li>senscape - <a href="roc-files/senscape_roc.txt">senscape_roc.txt</a></li>
+<li>Meiya Pico - <a href="roc-files/MeiyaPico_roc_result.txt">MeiyaPico_roc_result.txt</a></li>
+<li>Faceter.io - <a href="roc-files/lfw_tpfp_faceter.txt">lfw_tpfp_faceter.txt</a></li>
+<li>Pegatron - <a href="roc-files/pegatron_20171121_lfw_roc.txt">pegatron_20171121_lfw_roc.txt</a></li>
+<li>CHTFace - <a href="roc-files/chttl_roc_curve_0.9960.txt">chttl_roc_curve_0.9960.txt</a></li>
+<li>FRDC - <a href="roc-files/FRDC_ROC.txt">FRDC_ROC.txt</a></li>
+<li>YI+AI - <a href="roc-files/yi_ai_lfw_roc.txt">yi_ai_lfw_roc.txt</a></li>
+<li>Aratek - <a href="roc-files/aratek_faceimage_lfw_roc.txt">aratek_faceimage_lfw_roc.txt</a></li>
+<li>Cylltech - <a href="roc-files/Cylltech_LFW_ROC.txt">Cylltech_LFW_ROC.txt</a></li>
+<li>TerminAI - <a href="roc-files/TerminAI_roc.txt">TerminAI_roc.txt</a></li>
+<li>ever.ai - <a href="roc-files/everai_lfw_roc.txt">everai_lfw_roc.txt</a></li>
+<li>DRD, CTBC Bank - <a href="roc-files/CTBC_DRD_lfw_roc.txt">CTBC_DRD_lfw_roc.txt</a></li>
+<li>Innovative Technology - <a href="roc-files/ITL_FaceIT2_roc.txt">ITL_FaceIT2_roc.txt</a></li>
+<li>Oz Forensics - <a href="roc-files/Oz_Forensics_roc.txt">Oz_Forensics_roc.txt</a></li>
+</ul><br />
+
+Human Performance (Amazon Mechanical Turk)
+<ul>
+<li>original - <a href="roc-files/kumar_human_orig.txt">kumar_human_orig.txt</a></li>
+<li>cropped - <a href="roc-files/kumar_human_crop.txt">kumar_human_crop.txt</a></li>
+<li>inverse mask - <a href="roc-files/kumar_human_inv.txt">kumar_human_inv.txt</a></li>
+</ul><br />
+
+Notes: gnuplot is multi-platform and freely distributed, and can be
+downloaded <a href="http://www.gnuplot.info/">here</a>.
+plot_lfw_roc_unsupervised.p can either be run as a shell script on
+Unix/Linux machines (e.g. chmod u+x plot_lfw_roc_unsupervised.p;
+./plot_lfw_roc_unsupervised.p) or loaded through gnuplot (e.g. at the
+gnuplot command line gnuplot&gt; load
+"plot_lfw_roc_unsupervised.p").<br /><br />
+
+<a name="ComputingAUC"></a><h3>Computing Area Under Curve (AUC)</h3><br />
+
+The following Matlab function is used to compute area under the ROC
+curve (AUC) for unsupervised methods (as explained in
+the <a href="lfw_update.pdf">update to LFW technical
+report</a>):<br />
+<a href="lfw_auc.m">lfw_auc.m</a><br /><br />
+
+<hr /><br />
+
+<a name="Methods"></a><h3>Methods</h3>
+<ol>
+  <li><a name="eigenfaces"></a>Matthew A. Turk and Alex P. Pentland.<br />
+      <b>Face Recognition Using Eigenfaces.</b><br />
+      <i>Computer Vision and Pattern Recognition (CVPR)</i>, 1991.<br />
+      <a href="http://www.cs.ucsb.edu/~mturk/Papers/mturk-CVPR91.pdf">[pdf]</a><br /><br /></li>
+  <li><a name="nowak"></a>Eric Nowak and Frederic Jurie.  <br />
+    <b>Learning visual similarity measures for comparing never seen objects.</b> <br />
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2007.<br />
+    <a href="http://lear.inrialpes.fr/people/nowak/dwl/cvpr07.pdf">[pdf]</a><br />
+    <a href="http://lear.inrialpes.fr/people/nowak/similarity/index.html">[webpage]</a><br /><br />
+    
+    Results were obtained using the binary available from the paper's webpage.  
+    View 1 of the database was used to compute the cut-off threshold used in 
+    computing mean classification accuracy on View 2.  For each of the 10 folds 
+    of View 2 of the database, 9 of the sets were used as training, the similarity
+    measures were computed for the held out test set, and the threshold value was
+    used to classify pairs as matched or mismatched.  This procedure was performed
+    both on the original images as well as the set of aligned images from the funneled
+    parallel database.<br /><br />
+
+    We used the same parameters given on the <a href="http://lear.inrialpes.fr/people/nowak/similarity/index.html">paper's webpage</a>, with C=1 for the SVM, specifically:<br /><br />
+
+pRazSimiERCF -verbose 2 -ntrees 5 -maxleavesnb 25000 -nppL 100000 -ncondtrial 1000 -nppT 1000 -wmin 15 -wmax 100 -neirelsize 1 -svmc 1<br /><br />
+  </li>
+  <li><a name="funneled"></a>Gary B. Huang, Vidit Jain, and Erik Learned-Miller.  <br />
+    <b>Unsupervised joint alignment of complex images.</b>  <br />
+    <i>International Conference on Computer Vision (ICCV)</i>, 2007.<br />
+
+    <a href="http://vis-www.cs.umass.edu/papers/iccv07alignment.pdf">[pdf]</a><br />
+    <a href="http://vis-www.cs.umass.edu/faceAlignment/index.html">[webpage]</a><br /><br />
+
+    Face images were aligned using publicly available source code from project webpage.<br /><br /></li>
+
+  <li><a name="merl"></a>Gary B. Huang, Michael J. Jones, and Erik Learned-Miller.<br />
+    <b>LFW Results Using a Combined Nowak Plus MERL Recognizer.</b><br />
+    <i>Faces in Real-Life Images Workshop in European Conference on Computer Vision (ECCV)</i>, 2008.<br />
+    <a href="http://vis-www.cs.umass.edu/papers/eccv2008-merlnowak.pdf">[pdf]</a><br />
+    <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Face images were aligned
+    using a commercial system that attempts to identify nine facial
+    landmark points through Viola-Jones type landmark
+    detectors.<br /><br /></li>
+
+  <li><a name="hybrid"></a>Lior Wolf, Tal Hassner, and Yaniv Taigman.<br />
+    <b>Descriptor Based Methods in the Wild.</b><br />
+    <i>Faces in Real-Life Images Workshop in European Conference on Computer Vision (ECCV)</i>, 2008.<br />
+    <a href="http://www.cs.tau.ac.il/~wolf/papers/patchlbp.pdf">[pdf]</a><br />
+    <a href="http://www.openu.ac.il/home/hassner/projects/Patchlbp/">[webpage]</a><br /><br /></li>
+  <li><a name="mrh"></a>Conrad Sanderson and Brian C. Lovell.<br />
+    <b>Multi-Region Probabilistic Histograms for Robust and Scalable Identity Inference.</b><br />
+    <i>International Conference on Biometrics (ICB)</i>, 2009.<br />
+    <a href="http://conradsanderson.id.au/pdfs/sanderson_icb_2009.pdf">[pdf]</a><br /><br /></li>
+
+  <li><a name="pinto"></a>Nicolas Pinto, James J. DiCarlo, and David D. Cox.<br />
+    <b>How far can you get with a modern face recognition test set using only simple features?</b>
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2009.<br />
+    <a href="http://pinto.scripts.mit.edu/uploads/Research/pinto-dicarlo-cox-cvpr-2009-mkl.pdf">[pdf]</a><br /><br /></li>
+
+  <li><a name="guillaumin"></a>Matthieu Guillaumin, Jakob Verbeek, and Cordelia Schmid.<br />
+    <b>Is that you? Metric Learning Approaches for Face Identification.</b><br />
+    <i>International Conference on Computer Vision (ICCV)</i>, 2009.<br />
+    <a href="http://lear.inrialpes.fr/pubs/2009/GVS09/GVS09.pdf">[pdf]</a><br />
+    <a href="http://lear.inrialpes.fr/pubs/2009/GVS09/">[webpage]</a><br /><br />
+
+  <span style="color: red;">&dagger;</span>SIFT features were
+  extracted at nine facial feature points using the detector of
+  Everingham, Sivic, and Zisserman, 'Hello! My name is... Buffy' -
+  automatic naming of characters in TV video, BMVC,
+  2006.<br /><br /></li>
+
+  <li><a name="multishot"></a>Yaniv Taigman, Lior Wolf, and Tal Hassner.<br />
+    <b>Multiple One-Shots for Utilizing Class Label Information.</b><br />
+    <i>British Machine Vision Conference (BMVC)</i>, 2009.<br />
+    <a href="http://www.openu.ac.il/home/hassner/projects/multishot/TWH_BMVC09_Multishot.pdf">[pdf]</a><br />
+    <a href="http://www.openu.ac.il/home/hassner/projects/multishot/">[webpage]</a><br /><br />
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>,
+  a version of LFW aligned using a commercial, fiducial-points based
+  alignment system.<br /><br /></li>
+
+  <li><a name="combined-bg"></a>Lior Wolf, Tal Hassner, and Yaniv Taigman.<br />
+    <b>Similarity Scores based on Background Samples.</b><br />
+    <i>Asian Conference on Computer Vision (ACCV)</i>, 2009.<br />
+    <a href="http://www.openu.ac.il/home/hassner/projects/bgoss/ACCV09WolfHassnerTaigman.pdf">[pdf]</a><br /><br />
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="attsim"></a>Neeraj Kumar, Alexander C. Berg, Peter N. Belhumeur, and Shree K. Nayar.<br />
+    <b>Attribute and Simile Classifiers for Face Verification.</b><br />
+    <i>International Conference on Computer Vision (ICCV)</i>, 2009.<br />
+    <a href="http://www1.cs.columbia.edu/CAVE/publications/pdfs/Kumar_ICCV09.pdf">[pdf]</a><br />
+    <a href="http://www.cs.columbia.edu/CAVE/projects/faceverification/">[webpage]</a><br /><br />
+
+Neeraj Kumar, Alexander C. Berg, Peter N. Belhumeur, and Shree K. Nayar.<br />
+<b>Describable Visual Attributes for Face Verification and Image Search.</b><br />
+<i>IEEE Transactions on Pattern Analysis and Machine Intelligence (PAMI)</i>, October 2011.<br />
+<a href="http://homes.cs.washington.edu/~neeraj/projects/faceverification/base/papers/nk_pami2011_faceattrs.pdf">[pdf]</a><br />
+<a href="http://homes.cs.washington.edu/~neeraj/projects/faceverification/">[webpage]</a><br /><br />
+
+  <span style="color: red;">&dagger;</span>A commercial face detector
+  -
+  Omron, <a href="http://www.omron.com/r_d/coretech/vision/okao.html">OKAO
+  vision</a> - was used to detect fiducial point locations.  These
+  locations were used to align the images and extract features from
+  particular face regions.<br /><br />
+
+  <span style="color: red;">&Dagger;</span>Attribute classifiers
+  (e.g. Brown Hair) were trained using outside data and Amazon
+  Mechanical Turk labelings, and simile classifiers (e.g. mouth
+  similar to Angelina Jolie) were trained using images from PubFig.
+  The outputs of these classifiers on LFW images were used as features
+  in the recognition system.<br /><br />
+
+  The computed attributes for all images in LFW can be obtained in
+  this
+  file: <a href="http://www.cs.columbia.edu/CAVE/databases/pubfig/download/lfw_attributes.txt">lfw_attributes.txt</a>.
+  The file format and meaning are described
+  on <a href="http://www.cs.columbia.edu/CAVE/databases/pubfig/download/#misc">this
+  page</a>, and further information on the attributes can be found on
+  the <a href="http://www.cs.columbia.edu/CAVE/databases/pubfig/">project
+  website</a>.<br /><br /></li>
+
+  <li><a name="study"></a>Javier Ruiz-del-Solar, Rodrigo Verschae, and Mauricio Correa.<br />
+    <b>Recognition of Faces in Unconstrained Environments: A Comparative Study.</b><br />
+    <i>EURASIP Journal on Advances in Signal Processing (Recent
+    Advances in Biometric Systems: A Signal Processing
+    Perspective)</i>, Vol. 2009, Article ID 184617, 19 pages.<br />
+    <a href="http://asp.eurasipjournals.com/content/pdf/1687-6180-2009-184617.pdf">[pdf]</a><br /><br /></li>
+
+  <li><a name="relu"></a>Vinod Nair and Geoffrey E. Hinton.<br />
+    <b>Rectified Linear Units Improve Restricted Boltzmann Machines.</b><br />
+    <i>International Conference on Machine Learning (ICML)</i>, 2010.<br />
+    <a href="http://www.cs.toronto.edu/~hinton/absps/reluICML.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used Machine Perception
+    Toolbox from MPLab, UCSD to detect eye location, manually
+    corrected eye coordinates for worst ~2000 detections (and
+    therefore not conforming to strict LFW protocol), used coordinates
+    to rotate and scale images.<br />
+
+    <span style="color: red;">&dagger;</span>Used face data outside of
+    LFW for unsupervised feature learning.<br /><br /></li>
+
+  <li><a name="ledesc"></a>Zhimin Cao, Qi Yin, Xiaoou Tang, and Jian Sun.<br />
+    <b>Face Recognition with Learning-based Descriptor.</b><br />
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2010.<br />
+    <a href="http://research.microsoft.com/en-us/um/people/jiansun/papers/CVPR10_FaceReco.pdf">[pdf]</a><br /><br />
+
+  <span style="color: red;">&dagger;</span>Landmarks are detected
+  using the fiducial point detector of Liang, Xiao, Wen, Sun, Face
+  Alignment via Component-based Discriminative Search, ECCV, 2008,
+  which are then used to extract face component images for feature
+  computation.<br /><br />
+
+  <span style="color: red;">&Dagger;</span>The "+ comp" method uses a
+  pose-adaptive approach, where LFW images are labeled as being
+  frontal, left facing, or right facing, using three images selected
+  from the Multi-PIE data set.<br /><br /></li>
+
+  <li><a name="csml"></a>Hieu V. Nguyen and Li Bai.<br />
+      <b>Cosine Similarity Metric Learning for Face Verification.</b><br />
+      <i>Asian Conference on Computer Vision (ACCV)</i>, 2010.<br />
+      <a href="http://ima.ac.uk/papers/nguyen2010b.pdf">[pdf]</a><br />
+      <br />
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="brain"></a>Nicolas Pinto and David Cox.<br />
+      <b>Beyond Simple Features: A Large-Scale Feature Search Approach to Unconstrained Face Recognition.</b><br />
+      <i>International Conference on Automatic Face and Gesture Recognition (FG)</i>, 2011.<br />
+      <a href="http://pinto.scripts.mit.edu/uploads/Research/fg2011_lfw_final.pdf">[pdf]</a><br /><br />
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="plda"></a>Peng Li, Yun Fu, Umar Mohammed, James H. Elder, and Simon J.D. Prince.<br />
+      <b>Probabilistic Models for Inference About Identity.</b><br />
+      <i>IEEE Transactions on Pattern Analysis and Machine Intelligence (PAMI)</i>, vol. 34, no. 1, pp. 144-157, Jan. 2012.<br />
+      <a href="http://www.cs.ucl.ac.uk/staff/s.prince/Papers/PAMI_LIV.pdf">[pdf]</a><br />
+      <a href="http://www.computer.org/csdl/trans/tp/2012/01/ttp2012010144-abs.html">[webpage]</a><br /><br />
+      <!--<a href="http://web4.cs.ucl.ac.uk/staff/s.prince/Papers/PAMI_LIV.pdf">[pdf]</a><br /><br />-->
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+  </li>
+
+  <li><a name="associatepredict"></a>Qi Yin, Xiaoou Tang, and Jian Sun.<br />
+    <b>An Associate-Predict Model for Face Recognition.</b><br />
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2011.<br />
+    <a href="http://research.microsoft.com/en-us/um/people/jiansun/papers/CVPR11_FaceAPModel.pdf">[pdf]</a><br /><br />
+
+  <span style="color: red;">&dagger;</span>Four landmarks are detected
+  using a standard facial point detector and used to determine twelve
+  facial components.<br /><br />
+  
+  <span style="color: red;">&Dagger;</span>The recognition system
+  makes use of 200 identities from the Multi-PIE data set, covering 7
+  poses and 4 illumination conditions for each identity.<br /><br /></li>
+
+  <li><a name="facecomr2011b"></a>Yaniv Taigman and Lior Wolf.<br />
+    <b>Leveraging Billions of Faces to Overcome Performance Barriers in Unconstrained Face Recognition.</b><br />
+    <i>ArXiv e-prints</i>, 2011.<br />
+    <a href="http://face.com/research/faceR2011b.pdf">[pdf]</a><br />
+    <!--<a href="http://face.com/research">[webpage]</a><br />-->
+    <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+
+     <span style="color: red;">&dagger; &Dagger;</span>A commercial
+     recognition system, making use of outside training data, is
+     tested on LFW.<br /><br /></li>
+
+  <li><a name="lark"></a>Hae Jong Seo and Peyman Milanfar.<br />
+    <b>Face Verification Using the LARK Representation.</b><br />
+    <i>IEEE Transactions on Information Forensics and Security</i>, 2011.<br />
+    <a href="http://users.soe.ucsc.edu/~milanfar/publications/journal/TIFS_Final.pdf">[pdf]</a><br /><br />
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+    <li><a name="dml-eig"></a>Yiming Ying and Peng Li.<br />
+      <b>Distance Metric Learning with Eigenvalue Optimization.</b><br />
+      <i>Journal of Machine Learning Research (Special Topics on Kernel and Metric Learning)</i>, 2012.<br />
+      <a href="http://jmlr.org/papers/volume13/ying12a/ying12a.pdf">[pdf]</a><br /><br />
+
+  <span style="color:
+  red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>, and features extracted from facial feature points of <a href="#guillaumin">Guillaumin et al., 2009</a>.<br /><br /></li>
+
+  <li><a name="cmd_slbp"></a>Chang Huang, Shenghuo Zhu, and Kai Yu.<br />
+    <b>Large Scale Strongly Supervised Ensemble Metric Learning, with Applications to Face Verification and Retrieval.</b><br />
+    <i>NEC Technical Report TR115</i>, 2011.<br />
+    <a href="http://www.nec-labs.com/~chuang/papers/NECTechReport.2011-TR115.pdf">[pdf]</a><br />
+    <a href="http://arxiv.org/abs/1212.6094">[arxiv]</a><br /><br />
+    
+    <span style="color: red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+  
+  <li><a name="his_her"></a>Thomas Berg and Peter N. Belhumeur.<br />
+    <b>Tom-vs-Pete Classifiers and Identity-Preserving Alignment for Face Verification.</b><br />
+    <i>British Machine Vision Conference (BMVC)</i>, 2012.<br />
+    <a href="http://www.cs.columbia.edu/~tberg/papers/bmvc2012.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger; &Dagger;</span>Outside training
+    data is used in alignment and recognition systems.<br /><br /></li>
+
+  <li><a name="lpq"></a>Sibt ul Hussain, Thibault Napoléon, and Fréderic Jurie.<br />
+    <b>Face Recognition Using Local Quantized Patterns.</b><br />
+    <i>British Machine Vision Conference (BMVC)</i>, 2012.<br />
+    <a href="https://sites.google.com/site/sibtulhussain/lqp-bmvc12.pdf">[pdf]</a><br />
+    <a href="https://sites.google.com/site/sibtulhussain/code">[webpage/code]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="apem"></a>Haoxiang Li, Gang Hua, Zhe Lin, Jonathan Brandt, and Jianchao Yang.<br />
+    <b>Probabilistic Elastic Matching for Pose Variant Face Verification.</b><br/>
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2013.<br />
+    <a href="http://personal.stevens.edu/~hli18/papers/PEMCVPR2013_CameraReady.pdf">[pdf]</a><br /><br /></li>
+
+  <li><a name="cjb"></a>Dong Chen, Xudong Cao, Liwei Wang, Fang Wen, and Jian Sun.<br />
+    <b>Bayesian Face Revisited: A Joint Formulation.</b><br/>
+    <i>European Conference on Computer Vision (ECCV)</i>, 2012.<br />
+    <a href="http://home.ustc.edu.cn/~chendong/JointBayesian/eccv_2012_bayesian.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used landmark detector for image alignment.<br /><br />
+
+    <span style="color: red;">&Dagger;</span>Used outside training data in recognition system 
+    (for one set of results).<br /><br /></li>
+
+  <li><a name="hdlbp"></a>Dong Chen, Xudong Cao, Fang Wen, and Jian Sun.<br />
+    <b>Blessing of Dimensionality: High-dimensional Feature and Its Efficient Compression for Face Verification.</b><br/>
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2013.<br />
+    <a href="http://home.ustc.edu.cn/~chendong/HighDimLBP/PID2716719.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Extracted features at landmarks detected using Cao et al., 
+    Face Alignment by Explicit Shape Regression, CVPR 2012.<br /><br />
+
+    <span style="color: red;">&Dagger;</span>Used outside training data in recognition system
+    (for one set of results).<br /><br /></li>
+
+  <li><a name="sfrd"></a>Zhen Cui, Wen Li, Dong Xu, Shiguang Shan, and Xilin Chen.<br />
+    <b>Fusing Robust Face Region Descriptors via Multiple Metric Learning for Face Recognition in the Wild.</b><br />
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2013.<br />
+    <a href="https://sites.google.com/site/xyzliwen/publications/FRD-1838.pdf">[pdf]</a><br /><br />
+    <span style="color: red;">&dagger;</span>Used commercial face alignment software.<br /><br /></li>
+
+  <li><a name="lhs"></a>Gaurav Sharma, Sibt ul Hussain, Fréderic Jurie.<br />
+    <b>Local Higher-Order Statistics (LHS) for Texture Categorization and Facial Analysis.</b><br />
+    <i>European Conference on Computer Vision (ECCV)</i>, 2012.<br />
+    <a href="http://grvsharma.com/hpresources/sharma_lhs_eccv12.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="emrfs"></a>Shervin Rahimzadeh Arashloo and Josef Kittler.<br />
+    <b>Efficient Processing of MRFs for Unconstrained-Pose Face Recognition.</b><br />
+    <i>Biometrics: Theory, Applications and Systems</i>, 2013.<br /><br /></li>
+
+  <li><a name="paf"></a>Dong Yi, Zhen Lei, and Stan Z. Li.<br />
+    <b>Towards Pose Robust Face Recognition.</b><br />
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2013.<br />
+    <a href="http://www.cv-foundation.org/openaccess/content_cvpr_2013/papers/Yi_Towards_Pose_Robust_2013_CVPR_paper.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used outside training
+    data for alignment.<br /><br /></li>
+
+  <li><a name="fisher"></a>Karen Simonyan, Omkar M. Parkhi, Andrea Vedaldi, and Andrew Zisserman.<br />
+    <b>Fisher Vector Faces in the Wild.</b><br />
+    <i>British Machine Vision Conference (BMVC)</i>, 2013.<br />
+    <a href="http://www.robots.ox.ac.uk/~vgg/publications/2013/Simonyan13/simonyan13.pdf">[pdf]</a><br />
+    <a href="http://www.robots.ox.ac.uk/~vgg/publications/2013/Simonyan13/">[webpage]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used face landmark
+    detector, trained using Everingham et al., "Taking the bite out of
+    automatic naming of characters in TV video", Image and Vision
+    Computing, 2009.  (Used only for unsupervised setting results.)<br /><br /></li>
+
+  <li><a name="dfd"></a>Zhen Lei, Matti Pietikainen, and Stan Z. Li.<br />
+    <b>Learning Discriminant Face Descriptor.</b><br />
+    <i>IEEE Transactions on Pattern Analysis and Machine Intelligence (PAMI)</i>, 24 July 2013.<br />
+    <a href="http://ieeexplore.ieee.org/iel7/34/4359286/06531609.pdf?arnumber=6531609">[pdf]</a><br /><br />
+
+    <span style="color: red;">&Dagger;</span>Used outside training data (FERET images including identity information) 
+    to learn descriptor.<br /><br /></li>
+  </li>
+
+  <li><a name="tl_joint_bayesian"></a>Xudong Cao, David Wipf, Fang Wen, and Genquan Duan.<br />
+    <b>A Practical Transfer Learning Algorithm for Face Verification.</b><br />
+    <i>International Conference on Computer Vision (ICCV)</i>, 2013.<br />
+    <a href="http://research.microsoft.com/apps/pubs/?id=202192">[webpage]</a><br /><br />
+
+    <span style="color: red;">&Dagger;</span>Used outside training data in recognition system.<br /><br /></li>
+
+  <li><a name="sub-sml"></a>Qiong Cao, Yiming Ying, and Peng Li.<br />
+    <b>Similarity Metric Learning for Face Recognition.</b><br />
+    <i>International Conference on Computer Vision (ICCV)</i>, 2013.<br />
+    <a href="http://empslocal.ex.ac.uk/people/staff/yy267/similarity-metric-learning-ICCV2013-final.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="VMRS"></a>Oren Barkan, Jonathan Weill, Lior Wolf, and Hagai Aronowitz.<br />
+    <b>Fast High Dimensional Vector Multiplication Face Recognition.</b><br />
+    <i>International Conference on Computer Vision (ICCV)</i>, 2013.<br />
+    <a href="http://www.cs.tau.ac.il/~wolf/papers/fhdvmfr.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="cdbn"></a>Gary B. Huang, Honglak Lee, and Erik Learned-Miller.<br />
+    <b>Learning Hierarchical Representations for Face Verification with Convolutional Deep Belief Networks.</b><br />
+    <i>Computer Vision and Pattern Recognition (CVPR)</i>, 2012.<br />
+    <a href="http://vis-www.cs.umass.edu/papers/huang_lee_learned-miller_2012_cvpr.pdf">[pdf]</a><br />
+    <a href="http://vis-www.cs.umass.edu/~gbhuang/cdbns_cvpr2012.html">[webpage]</a><br /><br />
+
+    <span style="color: red;">&dagger;</span>Used <a href="http://www.openu.ac.il/home/hassner/data/lfwa/">LFW-a</a>.<br /><br /></li>
+
+  <li><a name="visionlabs"></a>VisionLabs<br />
+    V2.0<br />
+    Brief method description:<br />
+
+    We follow the Unrestricted, Labeled Outside Data protocol. Our
+    system consists of face detection, face alignment and face
+    descriptor extraction. We train three DNN models using multiple
+    losses and a training dataset with approximately 6M images from
+    multiple sources, containing 460K people (the training dataset has
+    no intersection with LFW). At test time we use original LFW images
+    processed by our production pipeline. The similarity between image
+    pairs is measured with the Euclidean distance.<br /><br />
+
+    V1.0<br />
+    Brief method description:<br />
+
+    The method makes use of metric learning and dense local image
+    descriptors. Results are reported for the unrestricted training
+    setup, <span style="color: red;">&dagger;</span>using LFW-a aligned images. 
+    External data is only used
+    implicitly for face alignment.<br /><br />
+
+    <a href="http://visionlabs.ai/">[webpage]</a><br />
+    <!--<a href="http://www.visionlabs.ru/face-recognition">[webpage]</a><br />-->
+    <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br /></li>
+
+  <li><a name="aurora"></a>Aurora Computer Services Ltd: Aurora-c-2014-1<br />
+    <a href="http://www.facerec.com/lfw/LFW-AuroraTechnicalReport.pdf">[pdf]</a> Technical Report<br />
+    <a href="http://www.facerec.com/">[webpage]</a><br />
+    Brief method description:<br />
+
+    The face recognition technology is comprised of Aurora's
+    proprietary algorithms, machine learning and computer vision
+    techniques. We report results using the unrestricted training
+    protocol, applied to the view 2 ten-fold cross validation test,
+    using images provided by the LFW website, including the 
+    <span style="color: red;">&dagger;</span>aligned
+    and funnelled sets and some external data used solely for
+    alignment purposes.<br />
+
+      <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br /></li>
+
+  <li><a name="facepp"></a>Face++<br />
+    <a href="http://arxiv.org/abs/1501.04690">[pdf]</a> Technical Report 2015<br />
+    <a href="http://arxiv.org/abs/1403.2802">[pdf]</a> Technical Report 2014<br />
+    <a href="http://www.faceplusplus.com/">[webpage]</a><br />
+    Brief method description:<br />
+
+    We designed a simple straightforward deep convolutional network,
+    trained with 5 millions of labeled web-collected data<span style="color: red;">&dagger;</span> 
+    <span style="color: red;">&Dagger;</span>. We extracted face
+    representation from 4 face regions and applied a simple L2 norm to
+    predict whether the pair of faces have the same identity.<br />
+
+    <!--
+    Our system <span style="color: red;">&dagger;</span> 
+    <span style="color: red;">&Dagger;</span>leverages
+    billion-level images and adopts deep learning
+    framework for face verification. Our face representation is
+    extracted from a set of facial landmarks. A new deep learning
+    structure is designed to generate highly-abstract and expressive
+    representation of faces. Based on the face representation,
+    covariance based recognition model is built to predict whether the
+    pair of faces have the same identity.<br />
+    -->
+
+      <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+    </li>
+
+  <li><a name="deepface"></a>
+Yaniv Taigman, Ming Yang, Marc'Aurelio Ranzato, Lior Wolf.<br />
+<b>DeepFace: Closing the Gap to Human-Level Performance in Face Verification.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2014.<br />
+<a href="https://www.facebook.com/publications/546316888800776/">[webpage]</a><br /><br />
+
+<span style="color: red;">&dagger;</span> <span style="color: red;">&Dagger;</span>Labeled outside data
+<br /><br />
+  </li>
+
+  <li><a name="convnet-rbm"></a>
+Yi Sun, Xiaogang Wang, and Xiaoou Tang.<br />
+<b>Hybrid Deep Learning for Face Verification.</b><br />
+<i>International Conference on Computer Vision (ICCV)</i>, 2013.<br />
+<a href="http://www.cv-foundation.org/openaccess/content_iccv_2013/papers/Sun_Hybrid_Deep_Learning_2013_ICCV_paper.pdf">[pdf]</a><br /><br />
+
+<span style="color: red;">&dagger;</span>Label-free outside data<br />
+<span style="color: red;">&dagger;</span> <span style="color: red;">&Dagger;</span>Labeled outside data
+<br /><br />
+  </li>
+
+  <li><a name="ddml"></a>
+Junlin Hu, Jiwen Lu, and Yap-Peng Tan.<br />
+<b>Discriminative Deep Metric Learning for Face Verification in the Wild.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2014.<br />
+<a href="https://sites.google.com/site/elujiwen/CVPR14.pdf?attredirects=0&d=1">[pdf]</a><br /><br />
+
+<span style="color: red;">&dagger;</span>Used LFW-a<br /><br />
+  </li>
+
+  <li><a name="poof"></a>
+Thomas Berg and Peter N. Belhumeur.<br />
+<b>POOF: Part-Based One-vs-One Features for Fine-Grained Categorization, Face Verification, and Attribute Estimation.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2013.<br />
+<a href="http://thomasberg.org/papers/poof-cvpr13.pdf">[pdf]</a><br /><br />
+
+    <span style="color: red;">&dagger; &Dagger;</span>Outside training
+    data is used in alignment and recognition systems.<br /><br />
+  </li>
+
+  <li><a name="canonical"></a>
+Zhenyao Zhu, Ping Luo, Xiaogang Wang, and Xiaoou Tang.<br />
+<b>Recover Canonical-View Faces in the Wild with Deep Neural Networks.</b><br />
+<a href="http://arxiv.org/abs/1404.3543">[pdf]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+
+<span style="color: red;">&dagger; &Dagger;</span>Outside training
+data is used in alignment and recognition systems.<br /><br />
+
+  </li>
+
+  <li><a name="deepid"></a>
+Yi Sun, Xiaogang Wang, and Xiaoou Tang.<br />
+<b>Deep Learning Face Representation from Predicting 10,000 Classes.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2014.<br />
+<a href="http://mmlab.ie.cuhk.edu.hk/pdf/YiSun_CVPR14.pdf">[pdf]</a><br />
+<br />
+<span style="color: red;">&dagger; &Dagger;</span>Outside training
+data is used in alignment and recognition systems.<br /><br />
+  </li>
+
+  <li><a name="gaussianface"></a>
+Chaochao Lu and Xiaoou Tang.<br />
+<b>Surpassing Human-Level Face Verification Performance on LFW with GaussianFace.</b><br />
+<a href="http://arxiv.org/abs/1404.3840">[pdf]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+
+<span style="color: red;">&dagger; &Dagger;</span>Outside training
+data is used in alignment and recognition systems.<br /><br />
+  </li>
+
+  <li><a name="deepid2"></a>
+Yi Sun, Xiaogang Wang, and Xiaoou Tang.<br />
+<b>Deep Learning Face Representation by Joint Identification-Verification.</b><br />
+<a href="http://arxiv.org/abs/1406.4773">[pdf]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+
+<span style="color: red;">&dagger; &Dagger;</span>Outside training
+data is used in alignment and recognition systems.<br /><br />
+  </li>
+
+  <li><a name="eigenpep"></a>
+Haoxiang Li, Gang Hua, Xiaohui Shen, Zhe Lin, and Jonathan Brandt.<br />
+<b>Eigen-PEP for Video Face Recognition.</b><br />
+<i>Asian Conference on Computer Vision (ACCV)</i>, 2014.<br />
+<a href="http://personal.stevens.edu/~hli18/papers/EigenPEPACCV2014.pdf">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="mrf-cskda"></a>
+Shervin Rahimzadeh Arashloo and Josef Kittler.<br />
+<b>Class-Specific Kernel Fusion of Multiple Descriptors for Face Verification Using Multiscale Binarised Statistical Image Features.</b></br>
+<i>IEEE Transactions on Information Forensics and Security</i>, 2014.<br />
+<a href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6905848">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="lm3l"></a>
+Junlin Hu, Jiwen Lu, Junsong Yuan, and Yap-Peng Tan.<br />
+<b>Large Margin Multi-Metric Learning for Face and Kinship Verification in the Wild.</b><br />
+<i>Asian Conference on Computer Vision (ACCV)</i>, 2014.<br />
+<a href="http://www.kinfacew.com/papers/LM3L_accv14.pdf">[pdf]</a><br /><br />
+
+<span style="color: red;">&dagger;</span>Used LFW-a<br /><br />
+  </li>
+
+  <li><a name="frontalized"></a>
+Tal Hassner, Shai Harel*, Eran Paz* and Roee Enbar.  *equal contribution<br />
+<b>Effective Face Frontalization in Unconstrained Images.</b><br />
+<!--<i>arXiv preprint arXiv:1411.7964</i>, 2014.-->
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2015.<br />
+<a href="http://arxiv.org/abs/1411.7964">[pdf]</a><br /><br />
+
+<span style="color: red;">&dagger;</span>Outside data used by 3rd party facial feature detector<br /><br />
+
+Also see LFW3D - collection of frontalized LFW images, under <a href="index.html#resources">LFW resources</a>.<br /><br />
+  </li>
+
+  <li><a name="tcit"></a>Taiwan Colour &amp; Imaging Technology (TCIT)<br />
+    Brief method description:<br />
+
+    TCIT calculates the average position of the facial area and judges
+    the identical person or other person by face recognition using the
+    facial area.  Face Feature Positioning is applied to get the face
+    data template which is used to verify different faces.<br />
+
+    <a href="http://www.tcit-us.com/">[webpage]</a><br />
+    <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="mbsifh"></a>
+Abdelmalik Ouamane, Bengherabi Messaoud, Abderrezak Guessoum, Abdenour Hadid, and Mohamed Cheriet.<br />
+<b>Multi-scale Multi-descriptor Local Binary Features and Exponential Discriminant Analysis for Robust Face Authentication.</b><br />
+<i>International Conference on Image Processing (ICIP)</i>, 2014.<br /><br />
+<span style="color: red;">&dagger;</span>Used LFW-a<br /><br />
+  </li>
+
+  <li><a name="deepid2+"></a>
+Yi Sun, Xiaogang Wang, and Xiaoou Tang.<br />
+<b>Deeply Learned Face Representations are Sparse, Selective, and Robust.</b><br />
+<i>arXiv:1412.1265, 2014</i>, 2014.<br />
+<a href="http://arxiv.org/abs/1412.1265">[pdf]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="betaface"></a>betaface.com<br />
+    Brief method description:<br />
+
+    <p>The model of our system integrated in SDK 3.2 is a single
+    medium sized deep CNN, embedding dimension is 512 (accuracy of
+    model variant with dimension 128 is 0.993).
+
+The training and test follow the Unrestricted, Labeled Outside Data
+protocol.
+
+Training was done on multiple datasets, over 9 million faces and 80000
+identities in total.
+
+Input is a tight greyscale face bounding box derived from face
+detector output without further alignment.</p>
+
+    <!--We have used original LFW images, converted to greyscale,
+    auto-aligned with our alignment system and followed unrestricted
+    protocol with labeled outside data:  unrestricted protocol,
+    labeled outside data results, LFW was not used for training or
+    fine-tuning.<br />-->
+
+    <a href="http://betaface.com/">[webpage]</a><br />
+    <a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="deepid3"></a>
+Yi Sun, Ding Liang, Xiaogang Wang, and Xiaoou Tang.<br />
+<b>DeepID3: Face Recognition with Very Deep Neural Networks.</b><br />
+<i>arXiv:1502.00873</i>, 2014.<br />
+<a href="http://arxiv.org/abs/1502.00873">[pdf]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="pop-pep"></a>
+Haoxiang Li, Gang Hua.<br />
+<b>Hierarchical-PEP Model for Real-world Face Recognition.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2015.<br />
+<a href="http://personal.stevens.edu/~hli18/papers/CVPR2015_POPPEP.pdf">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="insky"></a>
+insky.so<br />
+Brief method description:<br />
+We used original LFW images to run the test procedure. Our system choose the right images according to the requirement auto and output the facial recognition results. And then, using the standard method to get the ROC curve. We have not do training process using LFW images.<br />
+<a href="http://www.insky.so/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+</li>
+
+  <li><a name="uni-ubi"></a>
+Uni-Ubi<br />
+Brief method description:<br />
+In test, we have used original LFW images, converted to greyscale, auto-aligned with our face detector and alignment system and followed unrestricted protocol with labeled outside data results, LFW was not used for training or fine-tuning.<br />
+<a href="http://uni-ubi.com/index_en.html">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+</li>
+
+  <li><a name="hpen"></a>
+Xiangyu Zhu, Zhen Lei, Junjie Yan, Dong Yi, and Stan Z. Li.<br />
+<b>High-Fidelity Pose and Expression Normalization for Face Recognition in the Wild.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2015.<br />
+<a href="http://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Zhu_High-Fidelity_Pose_and_2015_CVPR_paper.pdf">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="facenet"></a>
+Florian Schroff, Dmitry Kalenichenko, and James Philbin.<br />
+<b>FaceNet: A Unified Embedding for Face Recognition and Clustering.</b><br />
+<i>Computer Vision and Pattern Recognition (CVPR)</i>, 2015.<br />
+<a href="http://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Schroff_FaceNet_A_Unified_2015_CVPR_paper.pdf">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="tencent"></a>
+YouTu Lab, Tencent<br />
+Brief method description:<br />
+
+<!--We followed the Unrestricted, Labeled Outside Data protocol and build
+our system combining our alignment system, deep CNN network with 12
+convolution layers and Joint Bayesian.  The whole system is trained on
+BestImage Celebrities Face (BCF) dataset, which contains about 20,000
+individuals and 1 million face images. The BCF dataset has no
+intersection with LFW. We divide BCF into two sub dataset-BCF training
+set and BCF validation set. We train out deep CNN network on BCF
+training set with 20 different face patches and combine features of
+each patch with PCA and Joint Bayesian learned on BCF validation set.-->
+
+We followed the Unrestricted, Labeled Outside Data protocol. YouTu
+Celebrities Face (YCF) dataset is used as training set which contains
+about 20,000 individuals and 2 million face images. With a
+multi-machine and multi-GPU tensorflow cluster, three extremely deep
+inception-resnet-like deep networks (depth= 360, 540, 720) are trained
+to accomplish face verification tasks. With final fc layer output as
+features, the most powerful single model can reach 0.9977 mean
+accuracy.
+<br />
+<a href="http://bestimage.qq.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+</li>
+
+  <li><a name="baidu"></a>
+Jingtuo Liu, Yafeng Deng, Tao Bai, Zhengping Wei, and Chang Huang; Baidu<br />
+<b>Targeting Ultimate Accuracy: Face Recognition via Deep Embedding.</b><br />
+<a href="http://arxiv.org/abs/1506.07310">[pdf]</a><br />
+
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="authenmetric"></a>
+AuthenMetric<br />
+Brief method description:<br />
+
+The system consists of a workflow of face detection, face alignment,
+face feature extraction, and face matching, all using our own
+algorithms. 25 face feature extraction models were trained using a
+deep network with a training set of 500,000 face images of 10,000
+individuals (no LFW subjects are included in the training set), each
+on a different face patch. The face matching (similarity of two faces)
+module was trained using a deep metric learning network, where a face
+is represented as the concatenation of the 25 feature vectors. The
+training and test follow the Unrestricted, Labeled Outside Data
+protocol.<br />
+<a href="http://www.authenmetric.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="mdml_dcp"></a>
+Changxing Ding, Jonghyun Choi, Dacheng Tao, and Larry S. Davis.<br />
+<b>Multi-Directional Multi-Level Dual-Cross Patterns for Robust Face Recognition.</b><br />
+<i>Pattern Analysis and Machine Intelligence</i>, Issue 99, July 2015.<br />
+<a href="http://arxiv.org/abs/1401.5311">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="mmdfr"></a>
+Changxing Ding and Dacheng Tao.<br />
+<b>Robust Face Recognition via Multimodal Deep Face Representation.</b><br />
+To appear in <i>Transactions on Multimedia</i>.<br />
+<a href="http://arxiv.org/abs/1509.00244">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="spartans"></a>
+Felix Juefei-Xu, Khoa Luu, and Marios Savvides.<br />
+<b>Spartans: Single-Sample Periocular-Based Alignment-Robust Recognition Technique Applied to Non-Frontal Scenarios.</b><br />
+<i>Image Processing</i>, Volume 24, Issue 12, August 2015.<br />
+<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7194796">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="sieda"></a>
+Abdelmalik Ouamane, Messaoud Bengherabi, Abdenour Hadid and Mohamed Cheriet.<br />
+<b>Side-Information based Exponential Discriminant Analysis for Face Verification in the Wild.</b><br />
+<i>Biometrics in the Wild, Automatic Face and Gesture Recognition Workshop</i>, 2015.<br />
+<a href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=7284837">[pdf]</a><br /><br />
+  </li>
+
+  <li><a name="cloudwalk"></a>
+Cloudwalk<br />
+Brief method description:<br />
+
+Our system has a complete pipeline for face recognition and each
+component is implemented by ourselves. In test, we used original LFW
+images. It automatic detect the right face, make face alignment and
+warp face to fixed size 128*128. During feature extraction, 6 DCNN
+models were trained respectively using different data augmentation
+methods with training set of 25,580 subjects, 2,545,659 face images
+(no LFW subjects were used for training or fine-tuning).<br />
+<a href="http://www.cloudwalk.cn/technology.html">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<!--
+  <li><a name="sighthound"></a>
+Sighthound, Inc.<br />
+Brief method description:<br />
+
+Our face recognition system consists of three major components, namely
+face detection, face alignment and feature extraction, all designed
+and implemented in house. We followed the unrestricted, labeled
+outside data protocol. The features are extracted from our deep
+network trained on 3.8 million images of more than 41,000
+individuals. None of the training overlaps with the LFW
+dataset. Unlike most top performing methods, our pipeline uses only a
+single crop of the face.<br />
+<a href="https://www.sighthound.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+-->
+
+  <li><a name="faceall"></a>
+Beijing Faceall Co., Ltd<br />
+Brief method description:<br />
+
+We followed the Unrestricted, Labeled Outside Data protocol and build
+our system which consists of face detection, face alignment, face
+feature extraction and face matching, all by ourselves. We have
+trained 3 models for face feature extraction on our own dataset with
+4260000 images of more than 60000 identities (no LFW subjects were
+used for training or fine-tuning). In the test procedure, we used
+original LFW images, which are detected with our face detection system
+and auto-aligned with our alignment system. After extracting 3 feature
+vectors from the 3 trained models, we concatenate the vectors directly
+and calculate the Euclidean distance of testing images as similarity
+measurement.<br />
+<!--We followed the Unrestricted, Labeled Outside Data protocol and build
+our system which consists of face detection, face alignment, face
+feature extraction, and face matching, all by ourselves.  We trained 4
+models for feature extraction on our own dataset with 830000 images of
+more than 18000 persons(no LFW subjects were used for training or
+fine-tuning).  In test, We have used original LFW images, detected
+face with our face detection system, auto-aligned with our alignment
+system. After extracting the 4 feature vectors from the 4 models, we
+combine features of each model with PCA and Joint Bayesian learned on
+our datasets.<br />-->
+<a href="http://www.faceall.cn/index.en.html">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="justmetalk"></a>
+JustMeTalk<br />
+Brief method description:<br />
+
+We collected 1.5 million photos, and eliminate the face photos in
+database of LFW. Based on deep convolution networks, we have trained 4
+feature extractors, and fused features through metric learning. During
+the test, we follow the unrestricted, labeled outside data protocol.<br />
+<a href="http://www.justmetalk.com">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="triangular"></a>
+Lilei Zheng, Khalid Idrissi, Christophe Garcia, Stefan Duffner, and Atilla Baskurt.<br />
+<b>Triangular Similarity Metric Learning for Face Verification.</b><br />
+<i>International Conference on Automatic Face and Gesture Recognition (FG)</i>, 2015.<br />
+<a href="https://liris.cnrs.fr/publis/?id=7042">[www]</a><br /><br />
+  </li>
+  
+  <li><a name="facevisa"></a>
+Facevisa<br />
+Brief method description:<br />
+
+We follow the unrestricted, labeled outside data protocol. We
+collected more than 2 million face photos, and eliminate the photos in
+database of LFW. We assemble features extracted from the common deep
+CNNs and other more efficient deep CNNs which we devised and named as
+simple looping structured CNNs and accumulated looping structured
+CNNs.  Face images are compared by L2 distance after feature
+embedding.
+
+<!--We follow the unrestricted, labeled outside data protocol. We
+collected 2 million face photos, and eliminate the photos in database
+of LFW. We linked 7 feature extractors which are based on deep
+convolution networks, and compare the L2 distance of the samples
+through compressing the features by feature embedding.-->
+<br />
+<a href="http://www.facevisa.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="pse"></a>
+Iacopo Masi, Anh Tuan Tran, Jatuporn Toy Leksut, Tal Hassner and Gerard Medioni.<br />
+<b>Do We Really Need to Collect Millions of Faces for Effective Face Recognition?</b><br />
+<i>European Conference on Computer Vision (ECCV)</i>, 2016<br />
+<!--<i>arXiv:1603.07057</i>, 24 Mar 2016<br />-->
+<a href="http://arxiv.org/abs/1603.07057">[pdf]</a><br />
+<a href="http://www.openu.ac.il/home/hassner/projects/augmented_faces/">[www]</a><br /><br />
+</li>
+
+  <li><a name="colorreco"></a>
+ColorReco<br />
+Brief method description:<br />
+
+We use Chinese Face data set to train our algorithm by Deep
+Convolutional neural network, and crop the model to ensure it can run
+on mobile phone real-time. In test, we have used original LFW images,
+converted to greyscale, auto-aligned with our face detector and
+alignment system and followed unrestricted protocol with labeled
+outside data:unrestricted protocol, labeled outside data results, LFW
+was not used for training or fine-tuning.<br />
+<a href="http://www.colorreco.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="asaphus"></a>
+Asaphus Vision<br />
+Brief method description:<br />
+
+Our processing pipeline is optimized for fast execution on embedded
+processors. We use face detection, alignment, 3D frontalization, and a
+convolutional network that has been trained on web-collected and
+infrared images and has been optimized for low execution time. We use
+the LFW data for evaluation, but not for training or tuning.<br />
+<a href="http://asaphus.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="daream"></a>
+Daream<br />
+Brief method description:<br />
+
+We followed the unrestricted, labeled outside data protocol and our
+system contains our internal off-the-shelf face detection, face
+alignment and face verification algorithm. Specifically, after
+alignment all the faces to the canonical shape, we use residual
+network, wide-residual network, highway path network and Alexnet to
+extract the face representation. Each of them are trained on our own
+data set, which contains 1.2 million images more than 30000 persons (no
+overlapping with LFW subjects and images). The feature vector from 4
+DNNs are concatenated and feeded to train the Joint Bayesian
+Model. All the parameters are tuned on our own validation set and we
+didn’t fine tune the model on LFW dataset. In test phase, we directly
+use original LFW images and process all the images with our end to end
+pipeline.<br />
+<a href="http://www.daream.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="lbpnet"></a>
+Meng Xi, Liang Chen, Desanka Polajnar, and Weiyang Tong.<br />
+<b>Local Binary Pattern Network: A Deep Learning Approach for Face Recognition.</b><br />
+<i>International Conference on Image Processing (ICIP)</i>, 2016.<br />
+<a href="http://ieeexplore.ieee.org/document/7532955/?arnumber=7532955">[www]</a><br /><br />
+  </li>
+
+  <li><a name="dahua"></a>
+Dahua-FaceImage<br />
+Brief method description:<br />
+
+We followed the Unrestricted, Labeled Outside Data protocol and build
+our system which has a complete pipeline for face recognition by
+ourselves. We collected a dataset with 2 million images of more than
+20,000 persons, which has no intersection with LFW. 30 deep CNN model
+were trained on our own dataset and features of each model were
+combined with Joint Bayesian.<br />
+<a href="http://www.dahuatech.com/recognition/index.php">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="easen"></a>
+Easen Electron<br />
+Brief method description:<br />
+
+We followed unrestricted, labeled outside data protocol and built face
+verification system with our own face detection and alignment
+algorithms.  We used training dataset containing 3.1M face images of
+59K persons collected from the Internet, which has no intersection
+with LFW dataset.  We trained six deep CNN models, one of which is the
+Inception-Resent-like network and the other five are Resnet-50
+networks, each operating on a different face patch.  These models
+achieved 99.78%, 99.72%, 99.50%, 98.97%, 99.48% and 99.28% accuracy,
+respectively. In test we used original LFW, and feature vectors from
+six deep CNN models are concatenated and transformed to
+low-dimensional vector by metric learning. After feature extraction,
+the distance between two feature vectors is measured by Euclidean
+distance.<br />
+
+<!--We followed unrestricted, labeled outside data protocol and built face
+verification system with our own face detection and alignment
+algorithms.  We used training set containing 59K identities with 3.1M
+face images collected from the Internet, which has no intersection
+with LFW dataset.  We trained two different embedding models based on
+8 patchs of face region, which achieved 99.77% and 99.75% pair-wise
+classification accuracy respectively.  In each model composed of 8
+DCNNs, the feature vectors from 8 DCNNs are concatenated and
+transformed to low-dimensional vector by subspace method and metric
+learning.  And then distance between two feature vectors is measured
+by Euclidean distance.  In test, we used original LFW images, and the
+final similarity of the pair is computed by linear combination of
+distances from two models.<br />-->
+
+<!--We followed the unrestricted, labeled outside data protocol and built
+system with our own face detection and alignment algorithm.  Our
+system is trained on our own dataset, which contains 600,000 images of
+12,000 individuals (no including LFW subjects).  We trained 8 models
+for feature extraction using deep convolution networks.  LFW database
+was not used for training or fine-tuning.  In test, we have used
+original LFW images, combined feature vectors from 8 models by deep
+metric learning and used the L2 distance for compare the
+samples.<br />-->
+<a href="http://www.easen-electron.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="gskytop"></a>
+Skytop Gaia<br />
+Brief method description:<br />
+
+We followed the Unrestricted-Label-Free Outside Data protocol and we
+build our system on four face alignment algorithms to meet the needs
+of different scenarios: the trade-off between detect speed and
+accuracy, which are all based on deep CNNs. The whole system is
+trained on our own dataset,which is set up with Shenzhen
+University. our training set contains 921,600 face images of 18,000
+individuals. we divide it into two parts:training data set and test
+dataset. Our own dataset has no intersection with LFW. The proportion
+of the training data set and test data set of about 1:10.<br />
+<a href="http://www.gskytop.com">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="cnn-3dmm"></a>
+Anh Tuan Tran, Tal Hassner, Iacopo Masi and Gerard Medioni.<br />
+<b>Regressing Robust and Discriminative 3D Morphable Models with a very Deep Neural Network</b><br />
+<i>arXiv:1612.04904</i>, 15 Dec 2016<br />
+<a href="http://arxiv.org/abs/1612.04904">[pdf]</a><br />
+<a href="http://www.openu.ac.il/home/hassner/projects/CNN3DMM">[www]</a><br /><br />
+</li>
+
+  <li><a name="samtech"></a>
+Samtech Facequest<br />
+Brief method description:<br />
+
+Our system is built on database consisting a major proportion of
+Indian faces collected from Indian websites and internet
+companies. Our database has no intersection with LFW identities. We
+follow unrestricted and labeled outside database for our system. We
+use 200,000 identities with 10 million images for training 5 models of
+deep convolution networks. We do a fusion of the 5 feature vectors
+followed by PCA for dimensional reduction. To calculate average
+accuracy on LFW 10-folds, for every set we calculate the accuracy
+using the best threshold from rest of the 9 sets.<br />
+<a href="http://samtechinfonet.com/face.html">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="SA-BSIF"></a>
+Juha Ylioinas, Juho Kannala, Abdenour Hadid, and Matti Pietikäinen.<br />
+<b>Face Recognition Using Smoothed High-Dimensional Representation</b><br />
+<i>Scandinavian Conference on Image Analysis</i>, 2015<br />
+<a href="https://users.aalto.fi/~kannalj1/publications/scia2015.pdf">[pdf]</a><br /><br />
+</li>
+
+<li><a name="RSF"></a>
+Christos Sagonas, Yannis Panagakis, Stefanos Zafeiriou, and Maja Pantic.<br />
+<b>Robust Statistical Frontalization of Human and Animal Faces</b><br />
+<i>International Journal of Computer Vision (IJCV)</i>, July 2016<br />
+<a href="http://ibug.doc.ic.ac.uk/media/uploads/documents/sagonas2016rsf.pdf">[pdf]</a><br /><br />
+</li>
+
+  <li><a name="xyz"></a>
+XYZ Robot<br />
+Brief method description:<br />
+
+We followed the unrestricted, labeled outside data protocol. Our
+system has a complete pipeline for face recognition including face
+detection, face alignment, face normalization and face matching, all
+implemented by ourselves. We trained 6 DCNNs models for feature
+extraction on our own datasets which contain two datasets. One of two
+datasets includes some dirty 500,000 face images of 10,000
+individuals, the other is clean 300,000 images of 6000 individuals (no
+LFW subjects were used for training or fine-tuning). We concatenate
+feature vectors from 6 DCNNs model with PCA to train Joint Bayesian on
+our datasets. In test, we have used original LFW images, detected
+face, auto-aligned and auto-normalized with our system.<br />
+<a href="http://xyzrobot-faceapi.eastasia.cloudapp.azure.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="thu"></a>
+THU CV-AI Lab<br />
+Brief method description:<br />
+
+We followed the Unrestricted, Labeled Outside Data protocol and build
+our system with our own face detector and alignment. There are two
+dataset used in our training step, none of them has intersection with
+LFW. A dataset with 6 million images of more than 80,000 persons is
+used for deep convolution networks training, the other dataset with
+400,000 images of 10,000 individuals is used for Metric Learning,
+which is for feature dimension reduction instead of PCA. 11 deep CNN
+models are trained. In test, we have used original LFW images,
+concatenate feature vectors from 11 models after dimension reduction
+and used the L2 distance for comparing the given pairs.<br />
+<a href="http://cvlab.ee.tsinghua.edu.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="pingan"></a>
+PingAn AI Lab<br />
+Brief method description:<br />
+
+We followed the unrestricted labeled outside data protocol and built
+our system using our face recognition pipeline. Our dataset including
+3 million images of more than 60,000 individuals collected from
+Internet, which has no intersection with LFW dataset. We trained 3
+improved Inception-Resnet-like network models. With the combined
+features, we directly use original LFW images and processed all the
+images with our end to end system in test.<br />
+<!--We followed the unrestricted labeled outside data protocol and built
+our system using our face recognition pipeline. We used the dataset
+collected from Internet with 2 million images of more than 50 thousand
+persons, which has no intersection with the LFW dataset. We trained 3
+CNN network models including Inception, Resnet, and combined the
+features. In test, we directly use original LFW images and process all
+the images with our end to end system.<br />-->
+<a href="http://www.pingan.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+  <li><a name="dlib"></a>
+dlib - open source maching learning library<br />
+
+Brief author's description:<br /><br />
+
+<p>As of February 2017, dlib includes a face recognition model.  This
+model is a ResNet network with 27 conv layers.  It's essentially a
+version of the ResNet-34 network from the paper Deep Residual Learning
+for Image Recognition by He, Zhang, Ren, and Sun with a few layers
+removed and the number of filters per layer reduced by half.</p>
+<p>The network was trained from scratch on a dataset of about 3
+million faces. This dataset is derived from a number of datasets.  The
+<a href="http://vintage.winklerbros.net/facescrub.html">face scrub
+dataset</a>,
+the <a href="http://www.robots.ox.ac.uk/~vgg/data/vgg_face/">VGG
+dataset</a>, and then a large number of images I scraped from the
+internet.  I tried as best I could to clean up the dataset by removing
+labeling errors, which meant filtering out a lot of stuff from VGG.  I
+did this by repeatedly training a face recognition CNN and then using
+graph clustering methods and a lot of manual review to clean up the
+dataset.  In the end about half the images are from VGG and face
+scrub.  Also, the total number of individual identities in the dataset
+is 7485.  I made sure to avoid overlap with identities in LFW.</p>
+
+<p>The network training started with randomly initialized weights and
+used a structured metric loss that tries to project all the identities
+into non-overlapping balls of radius 0.6.  The loss is basically a
+type of pair-wise hinge loss that runs over all pairs in a mini-batch
+and includes hard-negative mining at the mini-batch level.</p>
+
+<p>The code to run the model is publically available
+on <a href="https://github.com/davisking/dlib/blob/master/examples/dnn_face_recognition_ex.cpp">dlib's
+github page</a>.  From there you can find links to training code as
+well.</p><br />
+
+<a href="http://dlib.net/">[webpage]</a><br /><br />
+  </li>
+
+<li><a name="aureus"></a>
+Cyberextruder - Aureus 5.6<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labelled outside data protocol using
+our in-house trained face detection, landmark positioning, 2D to 3D
+algorithms and face recognition algorithm called Aureus. We trained
+our system using 3 million images of 30 thousand people. Care was
+taken to ensure that no training images or people were present in the
+totality of the LFW dataset. The face recognition algorithm utilizes a
+wide and shallow convolution network design with a novel method of
+non-linear activation which results in a compact, efficient model. The
+algorithm generates 256 byte templates in 100 milliseconds using a
+single 3.4GHz core (no GPU required). Templates are compared at a rate
+of 14.3 million per second per core.</p>
+
+<a href="http://www.cyberextruder.com">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="orion"></a>
+Beijing Orion Star Technology Co., Ltd.<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labeled outside data protocol and
+built our face recognition system. We collected a dataset from
+Internet with 4 million images of more than 80000 people, which has no
+intersection with the LFW dataset. We trained only one CNN model with
+Resnet-50, and use the Euclidean distance to measure the similarity of
+two images. In test, we process the original LFW images with our own
+system.</p>
+
+<a href="http://ainirobot.com">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="yuntu"></a>
+Yuntu WiseSight<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labelled outside data protocol to
+build our face recognition system. We collected about 5 million images
+from internet of more than 50 thousand individuals. These images have
+been cleaned, so the dataset has no intersection with the LFW . We
+trained only one ResNet network. In test, we used original LFW
+images. After processing these images with our own face detection and
+face alignment, we flipped every face horizontally. we combined the
+features and used PCA for feature dimension reduction.</p>
+
+<a href="http://www.facelab.cn">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="turing"></a>
+Turing123<br />
+Brief author's description:<br />
+
+<p>The model of our system is a single straightforward deep
+Convolutional Neural Network with 95M parameters before compression,
+embedding dimension is 256. Multi-loss is used to enhance
+discriminative power of the deeply learned features during training
+process. The training and test follow the Unrestricted, Labeled
+Outside Data protocol. 4 million images of nearly 40 thousand
+individuals is used to train our model for feature extraction, most of
+them are web crawling image. We removed individuals intersects with
+LFW, and cleaned the labeling error by repeatedly graph clustering,
+some efforts of manual cleaning up has also been made. In result
+report procedure, we strictly calculate average accuracy for every set
+using the best threshold from the rest of 9 sets on 10-folds. Given
+Face pairs are compared by cosine similarity distance after feature
+embedding.</p>
+
+<a href="http://www.turing123.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="hisign"></a>
+Hisign Technology<br />
+Brief author's description:<br />
+
+<p>We follow the unrestricted, labeled outside data protocol. Three
+different models were trained on our own dataset, which contains about
+10,000 individuals and 1 million face images (no overlapping with LFW
+subjects and images). The face is represented as the concatenation of
+these feature vectors. We used original LFW images and processed all
+the images with our end to end system in test.</p>
+
+<a href="http://www.hisign.com.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="deepmark"></a>
+Deepmark<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labelled outside data protocol. We
+trained our system using ~5 millions images of 70 thousand
+people. There was no intersection of LFW with training dataset. We use
+efficient feature maps and joint triple loss function due training
+which results in very fast and fairly accurate model. Feature
+extraction takes 400 ms on Raspberry PI 3.
+</p>
+
+<a href="https://deepmark.ru/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="force"></a>
+Force Infosystems<br />
+Brief author's description:<br />
+
+<p>We use database with 20,000 identities and 2 million images without
+any intersection with identities in LFW. We follow unrestricted and
+labeled outside data strategy. We trained using single deep
+convolution model followed by a novel feature training approach to
+generate discriminative feature output. Our network along with face
+detection run in real time on CPU.
+</p>
+
+<a href="http://forceinfosys.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="readsense"></a>
+ReadSense<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol. The
+data for training the face recognition and verification net include 4
+million images of more than 70,000 individuals collected from the
+Internet, which has no intersection with the LFW dataset. Four DNN
+models of improved ResNet-like network were trained and combined with
+multi-loss. Our end-to-end system consists of face detection,
+alignment, feature extraction and feature matching. We use cosine
+distance to measure the similarity between two feature vectors and
+calculate average accuracy for each subset using the best threshold
+from the rest of 9 subsets on 10-folds.
+</p>
+
+<a href="http://www.readsense.ai/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="cmcvar"></a>
+CM-CV&amp;AR<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol. We
+used a dataset of ~8 million images with 80,000 individuals collected
+from the internet, with no intersection with the LFW dataset. A single
+ResNet-like CNN model with 100 layers was trained with multi-loss. Our
+system consists of face detection, alignment, feature extraction and
+feature matching. During test, we use cosine distance as similarity
+measurement.</p>
+
+<!-- <p>We followed the unrestricted, labeled outside data protocol. We -->
+<!-- collected a dataset of 5 million images with 80,000 individuals from -->
+<!-- the Internet, which has no intersection with the LFW dataset. 3 very -->
+<!-- deep CNN models (over 700 layers) were trained with multi-loss, -->
+<!-- followed by metric learning. Our system consists of face detection, -->
+<!-- alignment, normalization, feature extraction and feature -->
+<!-- matching. During test, features of the 3 DNN models are concatenated -->
+<!-- and L2 distance is used to measure the similarity of the feature -->
+<!-- vectors.</p> -->
+
+<a href="http://www.cloudminds.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="sensingtech"></a>
+sensingtech<br />
+Brief author's description:<br />
+
+<p>The system consists of a workflow of face detection, face landmark,
+feature extraction, and feature matching, all using our own algorithm.
+13 face feature extraction models were trained using a deep CNN
+network with a training set of 800,000 face images of 20,000
+individuals (no LFW subjects are included in the training set).  The
+face matching module was trained using a deep metric learning network,
+where a face is represented as the concatenation of the 13 feature
+vectors.  The training and test follow the Unrestricted, Labeled
+Outside Data protocol.</p>
+
+<a href="http://www.sensingtech.com.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="glasssix"></a>
+Glasssix<br />
+Brief author's description:<br />
+
+<p>We followed the Unrestricted, Labeled Outside Data protocol.  The
+ratio of White to Black to Asian is 1:1:1 in the train set, which
+contains 100,000 individuals and 2 million face images. We spent a
+week training the networks which contain a improved resnet34 layer and
+a improved triplet loss layer on a Dual Maxwell-Gtx titan x machine
+with a four-stage training method.</p>
+
+<a href="http://www.glasssix.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="icarevision"></a>
+icarevision<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol.We
+collected a 2 million images of more than 80,000 individuals from the
+Internet,which has no intersection with the LFW dataset.We trained a
+single ResNet-like network with softmax loss. We only used one model
+to extract the features.Cosine distance is used to measure the
+similarity between two features.</p>
+
+<a href="http://www.icarevision.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="yunshitu"></a>
+yunshitu<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol. The
+training dataset contains 100,000 individuals with 10 million face
+images after data augmentation (no LFW subjects are included in the
+training set). We trained a single model with improved r100 CNN(280MB)
+and two angle-based loss under curriculum learning. Cosine distance is
+employed to measure the similarity of test features in pairs.</p>
+<!--<p>We followed the unrestricted, labeled outside data protocol. The
+training set contains 80,000 individuals with 5 million face images
+after data augmentation (no LFW subjects are included in the training
+set). We trained a single model which consists of improved res28net
+structure and one novel angle-based loss with curriculum
+learning. Cosine distance is employed to measure the similarity of
+test features in pairs.</p>-->
+
+<a href="http://yunshitu.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="remarkface"></a>
+RemarkFace<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labelled outside data protocol to
+build our face recognition system. We collected a dataset from Internet
+with 5 million images of more than 70000 people, which has no
+intersection with the LFW dataset. We built face verification system
+with our own face detection and alignment algorithms,which are all
+based on deep CNNs. We trained only one inception-resnet-like
+network. Using the best threshold from the rest of 9 sets on 10-folds
+and the L2 distance for the given pairs comparision, we strictly
+calculate average accuracy of each set in final result report.</p>
+
+<a href="http://www.datapeak.com.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="intellivision"></a>
+IntelliVision<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol for our
+face recognition system. Our dataset consists of 80,000 identities and
+8 million images. It does not have intersection with identities of
+LFW. Our face recognition system runs end to end on deep CNN models
+including face detection, face alignment and feature extraction.</p>
+
+<a href="https://www.intelli-vision.com/face-recognition/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="senscape"></a>
+senscape<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labeled outside data protocol and
+built our commercial face recognition system. The training data
+includes about 400,000 face images of 10,000+ individuals, which has
+no intersection with the LFW dataset. We trained only one modified
+Resnet model with 27 convolution layers. The output feature dimension
+of our model is 256, and the Euclidean distance is used to measure the
+similarity of images.</p>
+
+<a href="https://www.senscape.com.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="meiyapico"></a>
+4th Institute of Meiya Pico<br />
+Brief author's description:<br />
+
+<p>We follow the Unrestricted, Labeled Outside Data protocol. We
+collected a dataset from internet with 3 million images of more than
+60 thousand individuals, which has no intersection with the LFW
+dataset. Our model is a ResNet network with 20 layers, using 2 loss
+functions. During the test, we used original LFW images and we
+strictly calculated average accuracy for every set using the best
+threshold from the rest of 9 sets on 10 folds (LFW was not used for
+training or fine-tuning).</p>
+
+<a href="https://www.300188.cn/news/detail-1245.html">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="faceter"></a>
+Faceter.io<br />
+Brief author's description:<br />
+
+<p>We used two slightly modified ResNet-34 DNN models. Our training
+dataset contains about 3.2M samples and 40K classes, which doesn't
+have intersection with LFW.  We trained model with multi-loss and then
+finetuned by tripletloss. One model achieved 99.75% and another one
+99.72% accuracy. We concatenated feature vectors and calculate the
+Euclidean distance of testing images as similarity measurement. The
+final mean accuracy is 99.78%.</p>
+
+<a href="http://faceter.io/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="pegatron"></a>
+Pegatron<br />
+Brief author's description:<br />
+
+<p>We collected 8 million face images that include 130k individuals,
+and remove the overlap with LFW faces, then we aligned and rotated,
+cropped the face to gray images for training the 27 layers resnet like
+CNN. And we extract the features from CNN then do cosine similarity
+between two persons.</p>
+
+<a href="http://www.pegatroncorp.com">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="chtface"></a>
+CHTFace, Chunghwa Telecom<br />
+Brief author's description:<br />
+
+<p>We follow the Unrestricted, Labeled Outside Data protocol. Our
+system consists of a workflow of face detection, face alignment, face
+feature extraction, and face matching. We trained a single DNN model
+using softmax loss and some additional regularization losses. We used
+MSCeleb1M as our training data. The identities overlapped with LFW
+were removed and only 40k of the remaining ones were chosen for
+training. The face feature dimension is 128. The similarities between
+image pairs were measured with the Euclidean distance in the feature
+spaces.</p>
+
+<a href="https://iottl.cht.com.tw/iot/developer/intelligence">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="frdc"></a>
+FRDC<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol. The
+training data includes 5 million images of more than 70,000
+individuals collected from the Internet, which has no intersection
+with the LFW dataset. We trained a single ResNet-like network with
+multi-loss. Our end-to-end system consists of face detection,
+alignment, feature extraction and feature matching. We only used one
+model to extract the features, and the cosine distance was used to
+measure the similarity between two feature vectors. The average
+accuracy for each subset was calculated using the best threshold from
+the rest of 9 subsets on 10-folds.</p>
+
+<a href="http://www.fujitsu.com/cn/en">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="plwt"></a>
+Meryem Uzun-Per, Muhittin Gökmen.<br />
+<b>Face recognition with Patch-based Local Walsh Transform.</b><br />
+<i>Signal-Processing: Image Communication</i>, vol. 61, pp. 85-96, February 2018<br />
+<a href="https://www.sciencedirect.com/science/article/pii/S0923596517302400">[pdf]</a><br /><br />
+</li>
+
+<li><a name="yi_ai"></a>
+YI+AI<br />
+Brief author's description:<br />
+
+<p>We follow the Unrestricted, Labeled Outside Data protocol. Our
+system consists of face detection, face alignment and face descriptor
+extraction. We train a CNN model using multiple losses and a training
+dataset with approximately 2M images from multiple sources, containing
+80K people (the training dataset has no intersection with LFW). At
+test time we use original LFW images processed by our production
+pipeline and applied a simple L2 norm. The similarity between image
+pairs is measured with the Euclidean distance.</p>
+
+<a href="http://www.dress-plus.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="aratek"></a>
+Aratek<br />
+Brief author's description:<br />
+
+<p>We followed unrestricted, labeled outside data protocol and built
+face verification system with our face detection and alignment
+algorithms. We used training dataset containg 3.3 million images of
+more than 9000 persons, which has no intersection with LFW. The deep
+CNN models we trained is the inception resnet v1 network. The
+embedding dimension is 512, and the distance metric is cosine
+similarity.</p>
+
+<a href="http://www.aratek.com.cn/index.php?mod=product&cid=63&lanstr=zh_cn">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="cylltech"></a>
+Cylltech<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted labeled outside data protocol. The
+training dataset including 3 million images of more than 60,000
+individuals collected from Internet, which has no intersection with
+LFW dataset. Deeper residual CNN was trained. We use original LFW
+images and processed all the images with our end to end system.</p>
+
+<a href="http://www.cylltech.com.cn/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="mslzm"></a>
+Emrah Basaran, Muhittin Gökmen, and Mustafa E. Kamasak.<br />
+<b>An Efficient Multiscale Scheme Using Local Zernike Moments for Face Recognition.</b><br />
+<i>Applied Sciences</i>, vol. 8, no 5, 2018<br />
+<a href="http://www.mdpi.com/2076-3417/8/5/827">[pdf]</a><br /><br />
+</li>
+
+<li><a name="terminai"></a>
+TerminAI<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol to
+build our own face recognition system, which consists of face
+detection, alignment, feature extraction and feature matching. We
+trained a single Resnet-like model with angle-based loss to extract
+the features. The training set contains 80,000 individuals with more
+than 3.5 million face images, which has no intersection with the LFW
+dataset. In test, we processed the original LFW images with our own
+system and cosine distance is used to measure the similarity between
+two 512-dimension feature vectors.</p>
+
+<a href="http://terminai.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="everai"></a>
+ever.ai<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol. Our
+model is trained on a private photo database with no intersection with
+LFW. We trained custom face and landmark detectors for preprocessing
+and built our primary face recognition model on a dataset containing
+over 100k ids and 10M images. The recognition model is a single deep
+resnet which outputs an embedding vector given an input image, and
+similarity between a pair of images is evaluated via an l2-norm
+distance between their respective embeddings.</p>
+
+<a href="http://ever.ai/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="camvi"></a>
+Camvi Technologies<br />
+Brief author's description:<br />
+
+<p>We followed the unrestricted, labeled outside data protocol. Our
+model is trained on a subset of Microsoft 1M face dataset, containing
+around 80K identities and 5 Million faces.  We tried our best to
+remove the overlapped faces in LFW with close similarity scores. The
+recognition model is a single CNN network with size of 230 MBytes
+which outputs an embedding vector with 256 float point numbers for an
+input image. We use l2 distance to measure the similarity between two
+feature vectors and calculate average accuracy for each subset using
+the best threshold from the rest of 9 subsets on 10-folds.</p>
+
+<a href="https://www.camvi.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="iflytek"></a>
+IFLYTEK-CV<br />
+Brief author's description:<br />
+
+<p>We followed the Unrestricted, Labeled Outside Data
+protocol. MS-Celeb-1M dataset is used as training set which contains
+about 85000 individuals and 3.8 million face images.We tried our best
+to clean overlapped ID or similar faces with LFW. We simply use
+resnet-like deep networks to train face model.  In TEST phase, we only
+use unflipped LFW images to evaluate. With a single model, we can
+reach 0.9980 mean accuracy.</p>
+
+<a href="http://www.iflytek.com/">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="ctbc"></a>
+DRD, CTBC Bank<br />
+Brief author's description:<br />
+
+<p>We follow the Unrestricted, Labeled Outside Data protocol. We
+trained a single DNN model using angular distance loss. The training
+data is a subset (around 80K identities, 5M images) of MS1M that
+excludes the overlapped data with LFW. </p>
+
+<a href="https://www.ctbcbank.com">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="itl"></a>
+Innovative Technology Ltd, United Kingdom<br />
+Brief author's description:<br />
+
+<p>Our Model is based on a deep residual neural network trained
+in-house on over 5 million images, which is then embedded on to our
+Image Capture Unit (ICU). Each face is represented using a feature
+vector of 512 values. We use cosine distance to measure the similarity
+between two feature vectors and calculate average accuracy for each
+subset using the best threshold from the rest of 9 subsets on
+10-folds.  Specifically, the training and test follow the
+Unrestricted, Labelled Outside Data protocol.</p>
+
+<a href="https://www.innovative-technology.com/icu">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+<li><a name="ozf"></a>
+Oz Forensics<br />
+Brief author's description:<br />
+
+<p>We followed the Unrestricted, Labeled Outside data
+protocol. Original LFW images were used. Processing pipeline included
+our face and landmarks detector. Images were aligned by only two
+points - left and right eye. We used Arcface loss for training. The
+training set has over 3 million images and 30k persons and it does not
+have intersection with LFW dataset.</p>
+
+<a href="https://ozforensics.com/en/index">[webpage]</a><br />
+<a href="#notes"><span style="color: green;">[commercial system, see note at top]</span></a><br /><br />
+  </li>
+
+</ol><br />
+
+</div>
+
+                </div>
+                <div class="clearer"></div>
+            </div>
+        </div>
+
+        <div id="footer">
+
+        </div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2784021-1";
+urchinTracker();
+</script>
+    </body>
+</html>
