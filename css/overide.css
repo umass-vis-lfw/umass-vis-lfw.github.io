@@ -1,0 +1,18 @@
+/* override.css */
+
+/* 1. Sidebar width and styling */
+#sidebar {
+  width: 250px;           /* adjust to your desired width */
+  padding-right: 1rem;    /* optional inner spacing */
+  border-right: 1px solid #ccc; /* optional divider */
+}
+
+/* 2. Header background & text color */
+#header {
+  background-color: #00407a; /* your brand color */
+  color: white;              /* ensure text is readable */
+}
+#header #page-title {
+  color: #ffdd57;           /* accent color for your title */
+}
+
