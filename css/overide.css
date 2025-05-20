@@ -1,33 +1,30 @@
-/* 1. Make the header a sticky, full‑width nav */
+/* 1. Header + horizontal nav */
 #header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
+  position: sticky;
+  top: 0;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  border-bottom: 1px solid #eaeaea;
-  padding: 0 2rem;
-  height: 60px;
-  z-index: 1000;
+  padding: 0.75rem 2rem;
+  border-bottom: 1px solid #e1e1e1;
+  z-index: 100;
 }
 
-/* 2. Style your page title */
 #page-title {
   font-size: 1.25rem;
-  font-weight: 600;
-  color: #111;
+  font-weight: bold;
+  color: #333;
 }
 
-/* 3. Horizontal nav list */
 .nav-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
 }
-.nav-list li {
-  margin-left: 1.5rem;
+.nav-list li + li {
+  margin-left: 1rem;
 }
 .nav-list a {
   text-decoration: none;
@@ -38,19 +35,20 @@
   color: #0070f3;
 }
 
-/* 4. Push the rest of the page below the header */
-#main {
-  margin-top: 80px;       /* header height (60px) + 20px gap */
-  max-width: 960px;       /* center‑column width like airform.io */
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 1rem;        /* side‑padding on mobile */
+/* 2. Center‑column layout */
+#main.container {
+  max-width: 960px;
+  margin: 2rem auto;    /* vertical spacing + auto‑center */
+  padding: 0 1rem;      /* small side padding on mobile */
 }
 
-/* 5. (Optional) hide the old sidebar on desktop */
-@media (min-width: 768px) {
-  #sidebar {
-    display: none;
-  }
+/* 3. Center the image and make it responsive */
+.image-container {
+  text-align: center;
+  margin: 2rem 0;
 }
-
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
