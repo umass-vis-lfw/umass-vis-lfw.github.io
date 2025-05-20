@@ -1,18 +1,56 @@
-/* override.css */
-
-/* 1. Sidebar width and styling */
-#sidebar {
-  width: 250px;           /* adjust to your desired width */
-  padding-right: 1rem;    /* optional inner spacing */
-  border-right: 1px solid #ccc; /* optional divider */
-}
-
-/* 2. Header background & text color */
+/* 1. Make the header a sticky, full‑width nav */
 #header {
-  background-color: #00407a; /* your brand color */
-  color: white;              /* ensure text is readable */
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  padding: 0 2rem;
+  height: 60px;
+  z-index: 1000;
 }
-#header #page-title {
-  color: #ffdd57;           /* accent color for your title */
+
+/* 2. Style your page title */
+#page-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111;
+}
+
+/* 3. Horizontal nav list */
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+.nav-list li {
+  margin-left: 1.5rem;
+}
+.nav-list a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+.nav-list a:hover {
+  color: #0070f3;
+}
+
+/* 4. Push the rest of the page below the header */
+#main {
+  margin-top: 80px;       /* header height (60px) + 20px gap */
+  max-width: 960px;       /* center‑column width like airform.io */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;        /* side‑padding on mobile */
+}
+
+/* 5. (Optional) hide the old sidebar on desktop */
+@media (min-width: 768px) {
+  #sidebar {
+    display: none;
+  }
 }
 
